@@ -9,9 +9,10 @@
         >
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:padding="10dp"
+            android:gravity="center"
             android:id="@+id/app_item_vh_icon"
             android:src="@mipmap/ic_launcher" />
 
@@ -19,8 +20,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Whatsapp!"
+            android:textColor="@android:color/black"
             android:id="@+id/app_item_vh_label"
-            android:textSize="21sp"
+            android:textSize="16sp"
             android:padding="5dp"/>
 
 
@@ -32,7 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:id="@+id/app_item_vh_checkbox"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true" />
 
 
 </RelativeLayout>

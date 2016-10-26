@@ -1,5 +1,6 @@
 package com.androidclarified.applocker.activities;
 
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import com.androidclarified.applocker.R;
 import com.androidclarified.applocker.adapters.AppListAdapter;
 import com.androidclarified.applocker.model.AppBean;
+import com.androidclarified.applocker.services.AppCheckerService;
 import com.androidclarified.applocker.utils.AppSharedPreferences;
 
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initViews();
         getInstalledApps();
+        startService(new Intent(MainActivity.this,AppCheckerService.class));
 
 
 
@@ -74,10 +77,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 isChecked=true;
 
             AppBean appBean=new AppBean(packageName,appIcon,appLabel, isChecked);
-            appBeanList.add(appBean);
+            if(!isSystemApp(applicationInfoList.get(i)))
+                 appBeanList.add(appBean);
 
 
         }
+        appListAdapter=new AppListAdapter(this,appBeanList);
+        appList.setAdapter(appListAdapter);
+
     }
 
 
@@ -114,5 +121,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean isSystemApp(ApplicationInfo applicationInfo)
+    {
+        return ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM)!=0);
     }
 }

@@ -1,5 +1,6 @@
 package com.androidclarified.applocker.services;
 
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.app.usage.UsageStats;
@@ -10,9 +11,13 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import com.androidclarified.applocker.listeners.OverlayScreenListener;
 import com.androidclarified.applocker.utils.AppSharedPreferences;
 import com.androidclarified.applocker.widgets.LockOverlayView;
 
@@ -26,15 +31,18 @@ import java.util.TreeMap;
  * Created by My Pc on 10/18/2016.
  */
 
-public class AppCheckerService extends Service {
+public class AppCheckerService extends Service implements OverlayScreenListener {
 
     public static String RUNNING_PACKAGE_NAME = "";
     private Handler handler;
     private AppCheckerClass appCheckerClass;
-    private boolean isDialogVisile;
+
     private WindowManager windowManager;
     private WindowManager.LayoutParams windowParams;
     private LockOverlayView lockOverlayView;
+
+    public static boolean isDialogVisile = false;
+    public static boolean isPasswordEntered = false;
 
     @Nullable
     @Override
@@ -46,10 +54,14 @@ public class AppCheckerService extends Service {
     public int onStartCommand(Intent intent, int startid, int flags) {
         appCheckerClass = new AppCheckerClass();
         handler = new Handler();
-        lockOverlayView=new LockOverlayView(this);
-        windowManager= (WindowManager) getSystemService(WINDOW_SERVICE);
-        windowParams=new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+        lockOverlayView = new LockOverlayView(this);
+        lockOverlayView.setOverlayScreenListener(this);
+        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        windowParams = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSLUCENT);
+
+
+        Log.d("Irshad", "Service Started");
 
 
         handler.post(appCheckerClass);
@@ -69,6 +81,8 @@ public class AppCheckerService extends Service {
         return topPackName;
     }
 
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP | Build.VERSION_CODES.M)
     public String runningAppCheckerForLollipop() {
 
         UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
@@ -90,29 +104,51 @@ public class AppCheckerService extends Service {
         return " ";
     }
 
+    @Override
+    public void showOverlayScreen() {
+        windowManager.addView(lockOverlayView, windowParams);
+        AppCheckerService.isDialogVisile = true;
+    }
+
+    @Override
+    public void hideOverlayScreen() {
+
+        windowManager.removeView(lockOverlayView);
+        AppCheckerService.isPasswordEntered = false;
+        AppCheckerService.isDialogVisile = false;
+
+    }
+
+    @Override
+    public void hideOverlayForCorrectPassword() {
+        windowManager.removeView(lockOverlayView);
+    }
+
     private class AppCheckerClass implements Runnable {
         @Override
         public void run() {
 
             RUNNING_PACKAGE_NAME = runningAppChecker();
-            handler.postDelayed(this, 2000);
 
+            Toast.makeText(AppCheckerService.this, RUNNING_PACKAGE_NAME, Toast.LENGTH_SHORT).show();
             if (AppSharedPreferences.getAppSharedPreference(AppCheckerService.this, RUNNING_PACKAGE_NAME) && !isDialogVisile) {
-                 showDialog();
-                isDialogVisile=true;
-            } else if(isDialogVisile){
-                hideDialog();
-                isDialogVisile=false;
+
+
+                    showOverlayScreen();
+
+
+            } else if (isDialogVisile && !AppSharedPreferences.getAppSharedPreference(AppCheckerService.this, RUNNING_PACKAGE_NAME)) {
+
+                if (isPasswordEntered) {
+                    isPasswordEntered = false;
+                    isDialogVisile = false;
+                } else {
+                    hideOverlayScreen();
+                }
+
             }
+            handler.postDelayed(this, 2000);
         }
-    }
-    private void showDialog()
-    {
-        windowManager.addView(lockOverlayView,windowParams);
-    }
-    private void hideDialog()
-    {
-        windowManager.removeView(lockOverlayView);
     }
 
 

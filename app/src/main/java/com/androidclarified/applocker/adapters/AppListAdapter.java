@@ -26,10 +26,10 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.AppItemV
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<AppBean> appBeanList;
+    private List<AppBean> appBeanList;
 
 
-    public AppListAdapter(Context context, ArrayList<AppBean> appBeanList) {
+    public AppListAdapter(Context context, List<AppBean> appBeanList) {
         this.context = context;
         this.appBeanList=appBeanList;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -50,6 +50,7 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.AppItemV
 
         holder.appLabel.setText(appBeanList.get(position).getAppLabel());
         holder.imageIcon.setImageDrawable(appBeanList.get(position).getAppIcon());
+        holder.checkBox.setChecked(appBeanList.get(position).isChecked());
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

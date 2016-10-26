@@ -10,43 +10,149 @@
         android:layout_height="85dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:src="@drawable/lock_icon"/>
-
-
-    <android.support.v7.widget.AppCompatEditText
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="160dp"
-        android:hint="Enter the password"
-        android:id="@+id/locker_overlay_edit_text"/>
-
+        android:src="@drawable/lock_icon" />
 
 
     <TableLayout
+        android:id="@+id/lock_overlay_button_table"
         android:layout_width="match_parent"
         android:layout_height="290dp"
         android:layout_alignParentBottom="true"
         android:stretchColumns="*">
+
         <TableRow>
-            <android.support.v7.widget.AppCompatButton android:text="1" android:id="@+id/lock_overlay_one" android:background="@drawable/lock_overlay_button_drawable" style="@style/lockerButtonStyle" android:layout_margin="2dp" />
-            <android.support.v7.widget.AppCompatButton android:text="2" android:id="@+id/lock_overlay_two" android:background="@drawable/lock_overlay_button_drawable"  style="@style/lockerButtonStyle" android:layout_margin="2dp"/>
-            <android.support.v7.widget.AppCompatButton android:text="3" android:id="@+id/lock_overlay_three" android:background="@drawable/lock_overlay_button_drawable"  style="@style/lockerButtonStyle" android:layout_margin="2dp"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/lock_overlay_one"
+                style="@style/lockerButtonStyle"
+                android:layout_margin="2dp"
+                android:background="@drawable/lock_overlay_button_drawable"
+                android:text="1" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/lock_overlay_two"
+                style="@style/lockerButtonStyle"
+                android:layout_margin="2dp"
+                android:background="@drawable/lock_overlay_button_drawable"
+                android:text="2" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/lock_overlay_three"
+                style="@style/lockerButtonStyle"
+                android:layout_margin="2dp"
+                android:background="@drawable/lock_overlay_button_drawable"
+                android:text="3" />
         </TableRow>
+
         <TableRow>
-            <android.support.v7.widget.AppCompatButton android:text="4" android:id="@+id/lock_overlay_four" android:background="@drawable/lock_overlay_button_drawable" style="@style/lockerButtonStyle" android:layout_margin="2dp" />
-            <android.support.v7.widget.AppCompatButton android:text="5" android:id="@+id/lock_overlay_five" android:background="@drawable/lock_overlay_button_drawable"  style="@style/lockerButtonStyle" android:layout_margin="2dp"/>
-            <android.support.v7.widget.AppCompatButton android:text="6" android:id="@+id/lock_overlay_six" android:background="@drawable/lock_overlay_button_drawable"  style="@style/lockerButtonStyle" android:layout_margin="2dp" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/lock_overlay_four"
+                style="@style/lockerButtonStyle"
+                android:layout_margin="2dp"
+                android:background="@drawable/lock_overlay_button_drawable"
+                android:text="4" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/lock_overlay_five"
+                style="@style/lockerButtonStyle"
+                android:layout_margin="2dp"
+                android:background="@drawable/lock_overlay_button_drawable"
+                android:text="5" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/lock_overlay_six"
+                style="@style/lockerButtonStyle"
+                android:layout_margin="2dp"
+                android:background="@drawable/lock_overlay_button_drawable"
+                android:text="6" />
         </TableRow>
+
         <TableRow>
-            <android.support.v7.widget.AppCompatButton android:text="7" android:id="@+id/lock_overlay_seven" android:background="@drawable/lock_overlay_button_drawable" style="@style/lockerButtonStyle" android:layout_margin="2dp"/>
-            <android.support.v7.widget.AppCompatButton android:text="8" android:id="@+id/lock_overlay_eight" android:background="@drawable/lock_overlay_button_drawable"  style="@style/lockerButtonStyle" android:layout_margin="2dp"/>
-            <android.support.v7.widget.AppCompatButton android:text="9" android:id="@+id/lock_overlay_nine" android:background="@drawable/lock_overlay_button_drawable"  style="@style/lockerButtonStyle" android:layout_margin="2dp"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/lock_overlay_seven"
+                style="@style/lockerButtonStyle"
+                android:layout_margin="2dp"
+                android:background="@drawable/lock_overlay_button_drawable"
+                android:text="7" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/lock_overlay_eight"
+                style="@style/lockerButtonStyle"
+                android:layout_margin="2dp"
+                android:background="@drawable/lock_overlay_button_drawable"
+                android:text="8" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/lock_overlay_nine"
+                style="@style/lockerButtonStyle"
+                android:layout_margin="2dp"
+                android:background="@drawable/lock_overlay_button_drawable"
+                android:text="9" />
         </TableRow>
+
         <TableRow>
-            <android.support.v7.widget.AppCompatButton android:text="" android:id="@+id/lock_overlay_hash" android:background="@drawable/lock_overlay_button_drawable" style="@style/lockerButtonStyle" android:layout_margin="2dp"/>
-            <android.support.v7.widget.AppCompatButton android:text="0" android:id="@+id/lock_overlay_zero" android:background="@drawable/lock_overlay_button_drawable"  style="@style/lockerButtonStyle" android:layout_margin="2dp"/>
-            <android.support.v7.widget.AppCompatButton android:text="" android:id="@+id/lock_overlay_backspace" android:background="@drawable/lock_overlay_button_drawable"  style="@style/lockerButtonStyle" android:layout_margin="2dp"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/lock_overlay_hash"
+                style="@style/lockerButtonStyle"
+                android:layout_margin="2dp"
+                android:background="@drawable/lock_overlay_button_drawable"
+                android:text="" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/lock_overlay_zero"
+                style="@style/lockerButtonStyle"
+                android:layout_margin="2dp"
+                android:background="@drawable/lock_overlay_button_drawable"
+                android:text="0" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/lock_overlay_backspace"
+                style="@style/lockerButtonStyle"
+                android:layout_margin="2dp"
+                android:background="@drawable/lock_overlay_button_drawable"
+                android:text="GO" />
         </TableRow>
     </TableLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/lock_overlay_button_table"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:text="Password"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/locker_overlay_text"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="true"
+            android:text="afagssdac"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="28sp"
+            android:visibility="visible" />
+
+
+        <View
+            android:id="@+id/lock_overlay_underline"
+            android:layout_width="180dp"
+            android:layout_height="1dp"
+            android:layout_below="@id/locker_overlay_text"
+            android:background="@android:color/darker_gray" />
+
+    </LinearLayout>
+
+
 </RelativeLayout>

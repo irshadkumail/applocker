@@ -7,16 +7,20 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.androidclarified.applocker.R;
-import com.androidclarified.applocker.adapters.AppListAdapter;
+import com.androidclarified.applocker.adapters.MainPagerAdapter;
+import com.androidclarified.applocker.listeners.OnAppCheckedListener;
+import com.androidclarified.applocker.listeners.OnRecieveAppCheckedListener;
 import com.androidclarified.applocker.model.AppBean;
 import com.androidclarified.applocker.services.AppCheckerService;
 import com.androidclarified.applocker.utils.AppSharedPreferences;
@@ -24,67 +28,74 @@ import com.androidclarified.applocker.utils.AppSharedPreferences;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnAppCheckedListener {
 
     private FloatingActionButton fab;
     private Toolbar toolbar;
-    private RecyclerView appList;
-    private AppListAdapter appListAdapter;
-    private List<AppBean> appBeanList;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
+    private MainPagerAdapter mainPagerAdapter;
+    private ArrayList<AppBean> allAppsList;
+    private ArrayList<AppBean> installedAppsList;
+    private ArrayList<AppBean> appBeanList;
+    private ArrayList<OnRecieveAppCheckedListener> onRecieveAppCheckedListeners;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        appBeanList = getIntent().getExtras().getParcelableArrayList(SplashActivity.APP_BEAN_LIST);
+        createSeparateLists(appBeanList);
         initViews();
-        getInstalledApps();
-        startService(new Intent(MainActivity.this,AppCheckerService.class));
 
 
+        startService(new Intent(MainActivity.this, AppCheckerService.class));
 
     }
 
     public void initViews() {
 
         //Views Instantiation
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        appList = (RecyclerView) findViewById(R.id.activity_main_recycler);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        viewPager = (ViewPager) findViewById(R.id.main_view_pager);
+        tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
+        setSupportActionBar(toolbar);
+        initTabPager();
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         //Variables Instantion
-        appBeanList=new ArrayList<AppBean>();
-
-
-
-        setSupportActionBar(toolbar);
-        appList.setLayoutManager(new LinearLayoutManager(this));
 
 
     }
 
-    public void getInstalledApps() {
-        PackageManager packageManager = getPackageManager();
-        List<ApplicationInfo> applicationInfoList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
 
-        for (int i = 0; i < applicationInfoList.size(); i++) {
+    private void initTabPager() {
+        mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), installedAppsList, allAppsList);
+        viewPager.setAdapter(mainPagerAdapter);
 
-            Drawable appIcon=applicationInfoList.get(i).loadIcon(packageManager);
-            String appLabel = (String) applicationInfoList.get(i).loadLabel(packageManager);
-            String packageName = applicationInfoList.get(i).packageName;
-            boolean isChecked=false;
-            if(AppSharedPreferences.getAppSharedPreference(this,packageName))
-                isChecked=true;
+        tabLayout.setupWithViewPager(viewPager);
 
-            AppBean appBean=new AppBean(packageName,appIcon,appLabel, isChecked);
-            if(!isSystemApp(applicationInfoList.get(i)))
-                 appBeanList.add(appBean);
+    }
+
+    public void registerRecieveAppCheckedListeners(OnRecieveAppCheckedListener onRecieveAppCheckedListener) {
+        this.onRecieveAppCheckedListeners.add(onRecieveAppCheckedListener);
+    }
+
+    private void createSeparateLists(ArrayList<AppBean> appBeanList) {
+        allAppsList = new ArrayList<>();
+        installedAppsList = new ArrayList<>();
+        for (int i = 0; i < appBeanList.size(); i++) {
+            AppBean currentAppBean = appBeanList.get(i);
+
+            if (!currentAppBean.isSystemApp())
+                installedAppsList.add(currentAppBean);
 
 
+            allAppsList.add(currentAppBean);
         }
-        appListAdapter=new AppListAdapter(this,appBeanList);
-        appList.setAdapter(appListAdapter);
-
     }
 
 
@@ -123,8 +134,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean isSystemApp(ApplicationInfo applicationInfo)
-    {
-        return ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM)!=0);
+    @Override
+    public void onAppChecked(String packageName) {
+        for (OnRecieveAppCheckedListener onRecieveAppCheckedListener : onRecieveAppCheckedListeners) {
+            onRecieveAppCheckedListener.onAppCheckedReceived(packageName);
+        }
+
     }
 }

@@ -33,7 +33,8 @@ import java.util.TreeMap;
 
 public class AppCheckerService extends Service implements OverlayScreenListener {
 
-    public static String RUNNING_PACKAGE_NAME = "";
+    public String PREVIOUS_PACKAGE_NAME = "";
+    public String RUNNING_PACKAGE_NAME = "";
     private Handler handler;
     private AppCheckerClass appCheckerClass;
 
@@ -43,6 +44,8 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
 
     public static boolean isDialogVisile = false;
     public static boolean isPasswordEntered = false;
+
+
 
     @Nullable
     @Override
@@ -128,6 +131,21 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
         @Override
         public void run() {
 
+            if(PREVIOUS_PACKAGE_NAME.isEmpty() && RUNNING_PACKAGE_NAME.isEmpty())
+            {
+                PREVIOUS_PACKAGE_NAME=runningAppChecker();
+                RUNNING_PACKAGE_NAME=PREVIOUS_PACKAGE_NAME;
+            }else {
+                PREVIOUS_PACKAGE_NAME=RUNNING_PACKAGE_NAME;
+                RUNNING_PACKAGE_NAME=runningAppChecker();
+            }
+            if(!PREVIOUS_PACKAGE_NAME.equalsIgnoreCase(RUNNING_PACKAGE_NAME))
+            {
+                notifyAppChange();
+                Toast.makeText(AppCheckerService.this,"APP CHANGE",Toast.LENGTH_SHORT).show();
+            }
+
+            /*
             RUNNING_PACKAGE_NAME = runningAppChecker();
 
             Toast.makeText(AppCheckerService.this, RUNNING_PACKAGE_NAME, Toast.LENGTH_SHORT).show();
@@ -147,8 +165,22 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
                 }
 
             }
+            */
             handler.postDelayed(this, 2000);
         }
+    }
+
+    private void notifyAppChange()
+    {
+        if (AppSharedPreferences.getAppSharedPreference(this,RUNNING_PACKAGE_NAME) && !isDialogVisile)
+        {
+            showOverlayScreen();
+        }else if (!AppSharedPreferences.getAppSharedPreference(this,RUNNING_PACKAGE_NAME) && isDialogVisile )
+        {
+            hideOverlayScreen();
+        }
+
+
     }
 
 

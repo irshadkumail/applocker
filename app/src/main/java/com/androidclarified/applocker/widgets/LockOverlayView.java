@@ -140,7 +140,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     private void checkPassword(String text) {
         if (text.equalsIgnoreCase("1234")) {
             AppCheckerService.isPasswordEntered = true;
-            overlayScreenListener.hideOverlayForCorrectPassword();
+            overlayScreenListener.hideOverlayScreen();
             passwordText.setText("");
         } else {
             passwordText.setEnabled(true);

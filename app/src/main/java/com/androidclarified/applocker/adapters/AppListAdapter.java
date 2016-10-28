@@ -1,6 +1,9 @@
 package com.androidclarified.applocker.adapters;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.DimenRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.androidclarified.applocker.R;
+import com.androidclarified.applocker.listeners.OnAppCheckedListener;
 import com.androidclarified.applocker.model.AppBean;
 import com.androidclarified.applocker.utils.AppSharedPreferences;
 
@@ -27,12 +31,14 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.AppItemV
     private Context context;
     private LayoutInflater layoutInflater;
     private List<AppBean> appBeanList;
+    private OnAppCheckedListener onAppCheckedListener;
 
 
     public AppListAdapter(Context context, List<AppBean> appBeanList) {
         this.context = context;
         this.appBeanList=appBeanList;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        onAppCheckedListener= (OnAppCheckedListener) context;
 
     }
 
@@ -49,23 +55,33 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.AppItemV
     public void onBindViewHolder(AppItemViewHolder holder, final int position) {
 
         holder.appLabel.setText(appBeanList.get(position).getAppLabel());
-        holder.imageIcon.setImageDrawable(appBeanList.get(position).getAppIcon());
+        holder.imageIcon.setImageDrawable(getImageIcon(appBeanList.get(position).getPackName()));
         holder.checkBox.setChecked(appBeanList.get(position).isChecked());
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                onAppCheckedListener.onAppChecked(appBeanList.get(position).getPackName());
                 AppSharedPreferences.putAppSharedPreferences(context,appBeanList.get(position).getPackName(),isChecked);
+
             }
         });
-
-
 
     }
 
     @Override
     public int getItemCount() {
         return appBeanList.size();
+    }
+
+    private Drawable getImageIcon(String packName)
+    {
+        try {
+            return context.getPackageManager().getApplicationIcon(packName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return context.getResources().getDrawable(R.drawable.lock_icon);
     }
 
 

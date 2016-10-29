@@ -5,6 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import com.androidclarified.applocker.R;
 
 /**
  * Created by My Pc on 10/29/2016.
@@ -39,6 +42,11 @@ public class DrawerListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        return null;
+
+        View itemView=layoutInflater.inflate(R.layout.drawer_list_item_view,viewGroup,false);
+
+
+
+        return itemView;
     }
 }

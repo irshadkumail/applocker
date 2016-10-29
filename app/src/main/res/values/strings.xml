@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">AppLocker</string>
     <string name="action_settings">Settings</string>
+    <string-array name="drawer_list_array">
+        <item>Lock Screen</item>
+        <item></item>
+    </string-array>
 </resources>

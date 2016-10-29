@@ -2,6 +2,7 @@ package com.androidclarified.applocker.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -61,13 +62,7 @@ public class AllAppsFragment extends Fragment implements OnAppCheckedListener,On
 
         return rootView;
     }
-    public void onActivityCreated(Bundle bundle)
-    {
-        super.onActivityCreated(bundle);
-        mainActivity= (MainActivity) getActivity();
-        mainActivity.registerRecieveAppCheckedListeners(this);
 
-    }
 
     public void init(View rootView)
     {
@@ -75,6 +70,8 @@ public class AllAppsFragment extends Fragment implements OnAppCheckedListener,On
         allAppsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         appListAdapter=new AppListAdapter(getContext(),allAppsList);
         allAppsRecycler.setAdapter(appListAdapter);
+        mainActivity= (MainActivity) getActivity();
+        mainActivity.registerRecieveAppCheckedListeners(this);
     }
 
 
@@ -86,16 +83,25 @@ public class AllAppsFragment extends Fragment implements OnAppCheckedListener,On
 
     @Override
     public void onAppCheckedReceived(String packageName) {
-        int index=findPackageIndex(packageName);
+        final int index=findPackageIndex(packageName);
+        Handler handler = new Handler();
 
-        appListAdapter.notifyItemChanged(index);
+        Log.d("Irshad","AllAppsFragment Index"+index);
+        Log.d("Irshad","AllAppsFragment packname"+packageName);
+        final Runnable r = new Runnable() {
+            public void run() {
+                appListAdapter.notifyItemChanged(index);
+            }
+        };
+
+        handler.post(r);
 
     }
     private int findPackageIndex(String packageName)
     {
         for (int i=0;i<allAppsList.size();i++)
         {
-            if(allAppsList.get(i).getPackName().equals(packageName))
+            if(allAppsList.get(i).getPackName().equalsIgnoreCase(packageName))
                 return i;
         }
         return -1;

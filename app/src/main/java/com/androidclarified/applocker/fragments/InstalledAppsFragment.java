@@ -1,6 +1,7 @@
 package com.androidclarified.applocker.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,8 +57,6 @@ public class InstalledAppsFragment extends Fragment implements OnAppCheckedListe
     public void onActivityCreated(Bundle bundle)
     {
         super.onActivityCreated(bundle);
-        mainActivity= (MainActivity) getActivity();
-        mainActivity.registerRecieveAppCheckedListeners(this);
 
     }
 
@@ -77,6 +76,9 @@ public class InstalledAppsFragment extends Fragment implements OnAppCheckedListe
         installedAppsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         appListAdapter=new AppListAdapter(getContext(),appBeanList);
         installedAppsRecycler.setAdapter(appListAdapter);
+        mainActivity= (MainActivity) getActivity();
+        mainActivity.registerRecieveAppCheckedListeners(this);
+
     }
 
     @Override
@@ -88,9 +90,18 @@ public class InstalledAppsFragment extends Fragment implements OnAppCheckedListe
     @Override
     public void onAppCheckedReceived(String packageName) {
 
-        int index=findPackageIndex(packageName);
+        final int index=findPackageIndex(packageName);
+        Handler handler = new Handler();
+        Log.d("Irshad","InstalledAppsFragment Index"+index);
+        Log.d("Irshad","InstalledAppsFragment packname"+packageName);
+        final Runnable r = new Runnable() {
+            public void run() {
+                appListAdapter.notifyItemChanged(index);
+            }
+        };
 
-        appListAdapter.notifyItemChanged(index);
+        handler.post(r);
+
 
     }
     private int findPackageIndex(String packageName)

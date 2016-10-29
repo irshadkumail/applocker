@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         viewPager = (ViewPager) findViewById(R.id.main_view_pager);
         tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
         setSupportActionBar(toolbar);
+        onRecieveAppCheckedListeners=new ArrayList<>();
         initTabPager();
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 

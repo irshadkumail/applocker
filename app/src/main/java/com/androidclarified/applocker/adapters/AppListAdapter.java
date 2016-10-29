@@ -58,14 +58,7 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.AppItemV
         holder.imageIcon.setImageDrawable(getImageIcon(appBeanList.get(position).getPackName()));
         holder.checkBox.setChecked(appBeanList.get(position).isChecked());
 
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                onAppCheckedListener.onAppChecked(appBeanList.get(position).getPackName());
-                AppSharedPreferences.putAppSharedPreferences(context,appBeanList.get(position).getPackName(),isChecked);
 
-            }
-        });
 
     }
 
@@ -85,7 +78,7 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.AppItemV
     }
 
 
-    class AppItemViewHolder extends RecyclerView.ViewHolder {
+    class AppItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView appLabel;
         ImageView imageIcon;
@@ -98,9 +91,23 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.AppItemV
             appLabel = (TextView) view.findViewById(R.id.app_item_vh_label);
             imageIcon= (ImageView) view.findViewById(R.id.app_item_vh_icon);
             checkBox= (CheckBox) view.findViewById(R.id.app_item_vh_checkbox);
+            view.setOnClickListener(this);
+           
+
 
         }
 
+        @Override
+        public void onClick(View v) {
+            boolean value=appBeanList.get(getPosition()).isChecked();
+            if(value)
+                appBeanList.get(getPosition()).setChecked(false);
+            else
+                appBeanList.get(getPosition()).setChecked(true);
+
+            AppSharedPreferences.putAppSharedPreferences(context,appBeanList.get(getPosition()).getPackName(),appBeanList.get(getPosition()).isChecked());
+            onAppCheckedListener.onAppChecked(appBeanList.get(getPosition()).getPackName());
+        }
     }
 
 

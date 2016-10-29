@@ -29,7 +29,7 @@ public class InstalledAppsFragment extends Fragment implements OnAppCheckedListe
     private RecyclerView installedAppsRecycler;
     private AppListAdapter appListAdapter;
     private ArrayList<AppBean> appBeanList;
-    private MainActivity onAppCheckedListener;
+    private MainActivity mainActivity;
 
 
 
@@ -56,8 +56,8 @@ public class InstalledAppsFragment extends Fragment implements OnAppCheckedListe
     public void onActivityCreated(Bundle bundle)
     {
         super.onActivityCreated(bundle);
-        onAppCheckedListener= (MainActivity) getActivity();
-        onAppCheckedListener.setOnRecieveAppCheckedListener(this);
+        mainActivity= (MainActivity) getActivity();
+        mainActivity.registerRecieveAppCheckedListeners(this);
 
     }
 
@@ -81,14 +81,25 @@ public class InstalledAppsFragment extends Fragment implements OnAppCheckedListe
 
     @Override
     public void onAppChecked(String packageName) {
-        onAppCheckedListener.onAppChecked(packageName);
+        mainActivity.onAppChecked(packageName);
 
     }
 
     @Override
     public void onAppCheckedReceived(String packageName) {
-        Log.d("Irshad","InstalledAppsChanged");
 
+        int index=findPackageIndex(packageName);
 
+        appListAdapter.notifyItemChanged(index);
+
+    }
+    private int findPackageIndex(String packageName)
+    {
+        for (int i=0;i<appBeanList.size();i++)
+        {
+            if(appBeanList.get(i).getPackName().equals(packageName))
+                return i;
+        }
+        return -1;
     }
 }

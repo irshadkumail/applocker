@@ -86,8 +86,18 @@ public class AllAppsFragment extends Fragment implements OnAppCheckedListener,On
 
     @Override
     public void onAppCheckedReceived(String packageName) {
-        Log.d("Irshad","AllAppsChanged");
+        int index=findPackageIndex(packageName);
+
+        appListAdapter.notifyItemChanged(index);
 
     }
-    pur
+    private int findPackageIndex(String packageName)
+    {
+        for (int i=0;i<allAppsList.size();i++)
+        {
+            if(allAppsList.get(i).getPackName().equals(packageName))
+                return i;
+        }
+        return -1;
+    }
 }

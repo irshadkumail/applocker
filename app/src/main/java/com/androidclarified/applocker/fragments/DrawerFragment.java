@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.androidclarified.applocker.R;
 
@@ -14,9 +15,20 @@ import com.androidclarified.applocker.R;
 
 public class DrawerFragment extends Fragment {
 
+    private ListView drawerListView;
+
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup parent, Bundle bundle)
     {
-        return layoutInflater.inflate(R.layout.fragment_drawer,parent,false);
+        View rootView= layoutInflater.inflate(R.layout.fragment_drawer,parent,false);
+
+
+
+        return rootView;
+    }
+    private void initViews(View rootView)
+    {
+        drawerListView= (ListView) rootView.findViewById(R.id.drawer_fragment_list);
+
     }
 
 

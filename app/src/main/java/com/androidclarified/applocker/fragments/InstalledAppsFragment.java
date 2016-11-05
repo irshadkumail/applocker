@@ -23,14 +23,13 @@ import java.util.ArrayList;
  * Created by krazybee on 10/27/2016.
  */
 
-public class InstalledAppsFragment extends Fragment implements OnAppCheckedListener,OnRecieveAppCheckedListener {
+public class InstalledAppsFragment extends Fragment implements OnRecieveAppCheckedListener {
 
 
     private static final String INSTALLED_APPS_LIST="installed_apps_list";
     private RecyclerView installedAppsRecycler;
     private AppListAdapter appListAdapter;
     private ArrayList<AppBean> appBeanList;
-    private MainActivity mainActivity;
 
 
 
@@ -76,27 +75,20 @@ public class InstalledAppsFragment extends Fragment implements OnAppCheckedListe
         installedAppsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         appListAdapter=new AppListAdapter(getContext(),appBeanList);
         installedAppsRecycler.setAdapter(appListAdapter);
-        mainActivity= (MainActivity) getActivity();
-        mainActivity.registerRecieveAppCheckedListeners(this);
 
     }
 
-    @Override
-    public void onAppChecked(String packageName) {
-        mainActivity.onAppChecked(packageName);
-
-    }
 
     @Override
     public void onAppCheckedReceived(String packageName) {
 
         final int index=findPackageIndex(packageName);
         Handler handler = new Handler();
-        Log.d("Irshad","InstalledAppsFragment Index"+index);
         Log.d("Irshad","InstalledAppsFragment packname"+packageName);
+
         final Runnable r = new Runnable() {
             public void run() {
-                appListAdapter.notifyItemChanged(index);
+                appListAdapter.notifyDataSetChanged();
             }
         };
 

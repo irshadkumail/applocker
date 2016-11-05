@@ -25,14 +25,13 @@ import java.util.List;
  * Created by krazybee on 10/27/2016.
  */
 
-public class AllAppsFragment extends Fragment implements OnAppCheckedListener,OnRecieveAppCheckedListener {
+public class AllAppsFragment extends Fragment implements OnRecieveAppCheckedListener {
 
     private static final String ALL_APPS_LIST = "all_apps_list";
 
     ArrayList<AppBean> allAppsList;
     private RecyclerView allAppsRecycler;
     private AppListAdapter appListAdapter;
-    private MainActivity mainActivity;
 
 
     public static AllAppsFragment newInstance(ArrayList<AppBean> allAppsList) {
@@ -70,27 +69,21 @@ public class AllAppsFragment extends Fragment implements OnAppCheckedListener,On
         allAppsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         appListAdapter=new AppListAdapter(getContext(),allAppsList);
         allAppsRecycler.setAdapter(appListAdapter);
-        mainActivity= (MainActivity) getActivity();
-        mainActivity.registerRecieveAppCheckedListeners(this);
+
     }
 
 
-    @Override
-    public void onAppChecked(String packageName) {
-
-        mainActivity.onAppChecked(packageName);
-    }
 
     @Override
     public void onAppCheckedReceived(String packageName) {
         final int index=findPackageIndex(packageName);
         Handler handler = new Handler();
 
-        Log.d("Irshad","AllAppsFragment Index"+index);
+
         Log.d("Irshad","AllAppsFragment packname"+packageName);
         final Runnable r = new Runnable() {
             public void run() {
-                appListAdapter.notifyItemChanged(index);
+                appListAdapter.notifyDataSetChanged();
             }
         };
 

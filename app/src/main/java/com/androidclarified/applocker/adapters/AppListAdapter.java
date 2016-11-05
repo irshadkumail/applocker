@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DimenRes;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.androidclarified.applocker.R;
+import com.androidclarified.applocker.activities.MainActivity;
 import com.androidclarified.applocker.listeners.OnAppCheckedListener;
 import com.androidclarified.applocker.model.AppBean;
 import com.androidclarified.applocker.utils.AppSharedPreferences;
@@ -56,9 +58,8 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.AppItemV
 
         holder.appLabel.setText(appBeanList.get(position).getAppLabel());
         holder.imageIcon.setImageDrawable(getImageIcon(appBeanList.get(position).getPackName()));
-        holder.checkBox.setChecked(appBeanList.get(position).isChecked());
-
-
+        holder.checkBox.setChecked(AppSharedPreferences.getAppSharedPreference(context,appBeanList.get(position).getPackName()));
+        Log.d("Irshad","Binding View");
 
     }
 
@@ -105,6 +106,7 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.AppItemV
             else
                 appBeanList.get(getPosition()).setChecked(true);
 
+            Log.d("Irshad","Check Changed "+appBeanList.get(getPosition()).isChecked());
             AppSharedPreferences.putAppSharedPreferences(context,appBeanList.get(getPosition()).getPackName(),appBeanList.get(getPosition()).isChecked());
             onAppCheckedListener.onAppChecked(appBeanList.get(getPosition()).getPackName());
         }

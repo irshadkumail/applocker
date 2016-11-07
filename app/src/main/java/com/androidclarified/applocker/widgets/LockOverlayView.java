@@ -53,7 +53,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     }
 
     public void initButtons() {
-        buttons = new Button[11];
+        buttons = new TextView[11];
 
         mainLayout= (RelativeLayout) findViewById(R.id.lock_overlay_main_layout);
         passwordText = (TextView) findViewById(R.id.locker_overlay_text);
@@ -132,7 +132,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     }
 
     private void checkForPasswordLength(String string) {
-        if (string.length() >= 3) {
+        if (string.length() >= 4) {
             passwordText.setEnabled(false);
             checkPassword(string);
         }

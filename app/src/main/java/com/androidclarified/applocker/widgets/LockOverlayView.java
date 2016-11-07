@@ -15,6 +15,8 @@ import com.androidclarified.applocker.R;
 import com.androidclarified.applocker.listeners.OverlayScreenListener;
 import com.androidclarified.applocker.services.AppCheckerService;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by My Pc on 10/23/2016.
  */
@@ -23,8 +25,10 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
 
     private TextView passwordText;
-    private Button[] buttons;
+
+    private TextView[] buttons;
     private LayoutInflater layoutInflater;
+    private RelativeLayout mainLayout;
     private boolean isPasswordEntered;
     private AppCheckerService appCheckerService;
     private OverlayScreenListener overlayScreenListener;
@@ -39,7 +43,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     public void init() {
         layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        layoutInflater.inflate(R.layout.lock_overlay_view, this, true);
+        layoutInflater.inflate(R.layout.lock_overlay_normal_screen, this, true);
         initButtons();
 
     }
@@ -51,18 +55,19 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     public void initButtons() {
         buttons = new Button[11];
 
+        mainLayout= (RelativeLayout) findViewById(R.id.lock_overlay_main_layout);
         passwordText = (TextView) findViewById(R.id.locker_overlay_text);
-        buttons[0] = (Button) findViewById(R.id.lock_overlay_zero);
-        buttons[1] = (Button) findViewById(R.id.lock_overlay_one);
-        buttons[2] = (Button) findViewById(R.id.lock_overlay_two);
-        buttons[3] = (Button) findViewById(R.id.lock_overlay_three);
-        buttons[4] = (Button) findViewById(R.id.lock_overlay_four);
-        buttons[5] = (Button) findViewById(R.id.lock_overlay_five);
-        buttons[6] = (Button) findViewById(R.id.lock_overlay_six);
-        buttons[7] = (Button) findViewById(R.id.lock_overlay_seven);
-        buttons[8] = (Button) findViewById(R.id.lock_overlay_eight);
-        buttons[9] = (Button) findViewById(R.id.lock_overlay_nine);
-        buttons[10] = (Button) findViewById(R.id.lock_overlay_backspace);
+        buttons[0] = (TextView) findViewById(R.id.lock_overlay_zero);
+        buttons[1] = (TextView) findViewById(R.id.lock_overlay_one);
+        buttons[2] = (TextView) findViewById(R.id.lock_overlay_two);
+        buttons[3] = (TextView) findViewById(R.id.lock_overlay_three);
+        buttons[4] = (TextView) findViewById(R.id.lock_overlay_four);
+        buttons[5] = (TextView) findViewById(R.id.lock_overlay_five);
+        buttons[6] = (TextView) findViewById(R.id.lock_overlay_six);
+        buttons[7] = (TextView) findViewById(R.id.lock_overlay_seven);
+        buttons[8] = (TextView) findViewById(R.id.lock_overlay_eight);
+        buttons[9] = (TextView) findViewById(R.id.lock_overlay_nine);
+        buttons[10] = (TextView) findViewById(R.id.lock_overlay_backspace);
 
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setOnClickListener(this);
@@ -127,7 +132,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     }
 
     private void checkForPasswordLength(String string) {
-        if (string.length() >= 4) {
+        if (string.length() >= 3) {
             passwordText.setEnabled(false);
             checkPassword(string);
         }

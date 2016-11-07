@@ -88,7 +88,8 @@ public class InstalledAppsFragment extends Fragment implements OnRecieveAppCheck
 
         final Runnable r = new Runnable() {
             public void run() {
-                appListAdapter.notifyDataSetChanged();
+
+                appListAdapter.notifyItemChanged(index);
             }
         };
 

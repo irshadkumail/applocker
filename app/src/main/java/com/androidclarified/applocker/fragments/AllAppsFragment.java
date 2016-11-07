@@ -83,7 +83,7 @@ public class AllAppsFragment extends Fragment implements OnRecieveAppCheckedList
         Log.d("Irshad","AllAppsFragment packname"+packageName);
         final Runnable r = new Runnable() {
             public void run() {
-                appListAdapter.notifyDataSetChanged();
+                appListAdapter.notifyItemChanged(index);
             }
         };
 

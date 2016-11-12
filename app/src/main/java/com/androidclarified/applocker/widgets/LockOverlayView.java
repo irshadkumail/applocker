@@ -1,12 +1,15 @@
 package com.androidclarified.applocker.widgets;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +17,8 @@ import android.widget.Toast;
 import com.androidclarified.applocker.R;
 import com.androidclarified.applocker.listeners.OverlayScreenListener;
 import com.androidclarified.applocker.services.AppCheckerService;
+import com.androidclarified.applocker.utils.AppSharedPreferences;
+import com.androidclarified.applocker.utils.AppUtils;
 
 import org.w3c.dom.Text;
 
@@ -29,6 +34,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     private TextView[] buttons;
     private LayoutInflater layoutInflater;
     private RelativeLayout mainLayout;
+    private ImageView lockIcon;
     private boolean isPasswordEntered;
     private AppCheckerService appCheckerService;
     private OverlayScreenListener overlayScreenListener;
@@ -40,6 +46,21 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
         init();
 
     }
+
+    public LockOverlayView(Context context, AttributeSet attributeSet) {
+        super(context,attributeSet);
+        appCheckerService = (AppCheckerService) context;
+        init();
+
+    }
+
+    public LockOverlayView(Context context, AttributeSet attributeSet,int tdef) {
+        super(context,attributeSet,tdef);
+        appCheckerService = (AppCheckerService) context;
+        init();
+
+    }
+
 
     public void init() {
         layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -57,6 +78,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
         mainLayout= (RelativeLayout) findViewById(R.id.lock_overlay_main_layout);
         passwordText = (TextView) findViewById(R.id.locker_overlay_text);
+        lockIcon= (ImageView) findViewById(R.id.lock_overlay_normal_icon);
         buttons[0] = (TextView) findViewById(R.id.lock_overlay_zero);
         buttons[1] = (TextView) findViewById(R.id.lock_overlay_one);
         buttons[2] = (TextView) findViewById(R.id.lock_overlay_two);
@@ -74,6 +96,19 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
         }
 
 
+    }
+
+    public void setBackgroundColor()
+    {
+        mainLayout.setBackgroundColor(AppUtils.getColor(getContext(), AppSharedPreferences.getLockThemePreference(getContext())));
+    }
+    public void setImageIcon(String packName)
+    {
+        try {
+            lockIcon.setImageDrawable(getContext().getPackageManager().getApplicationIcon(packName));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 

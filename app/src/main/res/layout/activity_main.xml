@@ -27,6 +27,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="AppLock"
+                android:textColor="@color/white"
+                android:id="@+id/main_activity_toolbar_text"
                 android:textSize="24sp" />
 
 

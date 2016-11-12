@@ -4,4 +4,33 @@
     <color name="colorPrimaryDark">#388e3c</color>
     <color name="colorAccent">#cddc39</color>
     <color name="jetblack">#343434</color>
+    <color name="white">#FFFFFF</color>
+    <color name="grey">#7f7f7f</color>
+    <color name="pink">#FF1493</color>
+
+    <color name="tab_indicator_color">#fdb515</color>
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#727272</color>
+    <color name="blue">#207DAA</color>
+    <color name="black">#191919</color>
+    <color name="grey_color">#656565</color>
+    <color name="emi_color">#191919</color>
+    <color name="transparent_grey">#4D7F7F7F</color>
+    <color name="light_grey">#0D7F7F7F</color>
+    <color name="deep_orange">#FF9800</color>
+    <color name="selfee">#ce7970</color>
+    <color name="teal">#009688</color>
+    <color name="cyan">#00BCD4</color>
+    <color name="amber">#FFC107</color>
+    <color name="blue_grey">#607D8B</color>
+
+    <color name="chatitemblue">#207DA9</color>
+    <color name="chatblack">#191919</color>
+    <color name="white_grey">#40FFFFFF</color>
+
+    <color name="light_green">#3eb74e</color>
+    <color name="light_purple">#8c61b3</color>
+    <color name="light_orange">#ffb500</color>
+    <color name="seek_bar_prog_color">#FDB515</color>
+    <color name="home_intro_color">#393F53</color>
 </resources>

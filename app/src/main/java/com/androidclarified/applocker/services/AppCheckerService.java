@@ -109,6 +109,8 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
 
     @Override
     public void showOverlayScreen() {
+        lockOverlayView.setImageIcon(RUNNING_PACKAGE_NAME);
+        lockOverlayView.setBackgroundColor();
         windowManager.addView(lockOverlayView, windowParams);
         AppCheckerService.isDialogVisile = true;
     }

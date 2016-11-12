@@ -16,22 +16,19 @@
             android:layout_margin="5dp"
             android:padding="5dp"
             android:id="@+id/drawer_list_item_icon"
-            android:src="@mipmap/ic_launcher" />
+            />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="28dp"
+            android:paddingLeft="18dp"
             android:id="@+id/drawer_list_item_text"
-            android:paddingTop="11dp"
             android:text="Set Password"
-            android:textColor="@android:color/black"
+            android:paddingTop="17dp"
+            android:textColor="@color/textColorSecondary"
             android:textSize="16sp" />
 
 
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray" />
+
 </LinearLayout>

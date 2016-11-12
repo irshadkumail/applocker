@@ -14,10 +14,12 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.widget.TextView;
 
 import com.androidclarified.applocker.R;
 import com.androidclarified.applocker.model.AppBean;
 import com.androidclarified.applocker.utils.AppSharedPreferences;
+import com.androidclarified.applocker.utils.AppUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private MainActivityStarter mainActivityStarter;
     private Handler handler;
+    private TextView appName;
     private ArrayList<AppBean> appBeanList=new ArrayList<>();
 
 
@@ -45,7 +48,8 @@ public class SplashActivity extends AppCompatActivity {
     {
         mainActivityStarter=new MainActivityStarter();
         handler=new Handler();
-
+        appName= (TextView) findViewById(R.id.activity_splash_text);
+        appName.setTypeface(AppUtils.getFancyTextTypeface(this));
         handler.postDelayed(mainActivityStarter,2000);
     }
 

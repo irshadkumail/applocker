@@ -9,7 +9,9 @@
     <ImageView
         android:layout_width="85dp"
         android:layout_height="85dp"
-        android:tint="@android:color/white"
+        android:id="@+id/lock_overlay_normal_icon"
+
+        android:scaleType="fitXY"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:src="@drawable/lock_icon" />

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.androidclarified.applocker.R;
 import com.androidclarified.applocker.fragments.ChangePasswordFragment;
 import com.androidclarified.applocker.fragments.ChangeThemeFragment;
+import com.androidclarified.applocker.utils.AppUtils;
 
 /**
  * Created by My Pc on 11/6/2016.
@@ -47,10 +48,12 @@ public class DrawerActivity extends AppCompatActivity {
             case THEME_CHANGE_ACTION:
                 selectedFragment=new ChangeThemeFragment();
                 toolbarHeading.setText("Change Theme");
+                toolbarHeading.setTypeface(AppUtils.getPrimaryTextTypeface(this));
                 break;
             case PASSWORD_CHANGE_ACTION:
                 selectedFragment=new ChangePasswordFragment();
                 toolbarHeading.setText("Change Password");
+                toolbarHeading.setTypeface(AppUtils.getPrimaryTextTypeface(this));
                 break;
 
         }

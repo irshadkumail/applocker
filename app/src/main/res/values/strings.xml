@@ -2,7 +2,7 @@
     <string name="app_name">AppLocker</string>
     <string name="action_settings">Settings</string>
     <string-array name="drawer_list_array">
-        <item>Change Lock Theme</item>
+        <item>Change Theme</item>
         <item>Change Password</item>
     </string-array>
 </resources>

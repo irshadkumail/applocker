@@ -29,6 +29,20 @@ public class AppSharedPreferences {
         return sharedPreferences.getBoolean(keyName,false);
     }
 
+    public static void putLockThemePreference(Context context,int themeIndex)
+    {
+        SharedPreferences sharedPreferences=context.getSharedPreferences(APP_PREFERENCE_FILE_NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putInt(AppConstants.LOCK_THEME_KEY,themeIndex);
+        editor.commit();
+    }
+
+    public static int getLockThemePreference(Context context)
+    {
+        SharedPreferences sharedPreferences=context.getSharedPreferences(APP_PREFERENCE_FILE_NAME,Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(AppConstants.LOCK_THEME_KEY,0);
+    }
+
 
 
 }

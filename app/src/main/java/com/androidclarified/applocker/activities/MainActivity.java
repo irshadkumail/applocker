@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.androidclarified.applocker.R;
 import com.androidclarified.applocker.adapters.MainPagerAdapter;
@@ -25,6 +26,7 @@ import com.androidclarified.applocker.listeners.OnRecieveAppCheckedListener;
 import com.androidclarified.applocker.model.AppBean;
 import com.androidclarified.applocker.services.AppCheckerService;
 import com.androidclarified.applocker.utils.AppSharedPreferences;
+import com.androidclarified.applocker.utils.AppUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Toolbar toolbar;
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    private TextView toolbarHeading;
     private MainPagerAdapter mainPagerAdapter;
     private ArrayList<AppBean> allAppsList;
     private ArrayList<AppBean> installedAppsList;
@@ -62,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         viewPager = (ViewPager) findViewById(R.id.main_view_pager);
         tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
+        toolbarHeading= (TextView) findViewById(R.id.main_activity_toolbar_text);
+        toolbarHeading.setTypeface(AppUtils.getFancyTextTypeface(this));
         setSupportActionBar(toolbar);
         onRecieveAppCheckedListeners=new ArrayList<>();
         initTabPager();

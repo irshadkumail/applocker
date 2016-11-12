@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.androidclarified.applocker.R;
 import com.androidclarified.applocker.fragments.DrawerFragment;
 import com.androidclarified.applocker.listeners.OnDrawerItemClick;
+import com.androidclarified.applocker.utils.AppUtils;
 
 /**
  * Created by My Pc on 10/29/2016.
@@ -49,6 +50,7 @@ public class DrawerListAdapter extends BaseAdapter {
 
         View itemView=layoutInflater.inflate(R.layout.drawer_list_item_view,viewGroup,false);
         TextView textView= (TextView) itemView.findViewById(R.id.drawer_list_item_text);
+        textView.setTypeface(AppUtils.getSecondaryTextTypeface(context));
         textView.setText(listItemArray[i]);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -20,6 +20,7 @@ import com.androidclarified.applocker.activities.MainActivity;
 import com.androidclarified.applocker.listeners.OnAppCheckedListener;
 import com.androidclarified.applocker.model.AppBean;
 import com.androidclarified.applocker.utils.AppSharedPreferences;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;

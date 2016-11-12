@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.androidclarified.applocker.activities.SplashActivity">
 
     <TextView
@@ -12,6 +13,7 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:text="AppLock"
+        android:id="@+id/activity_splash_text"
         android:layout_centerInParent="true"
         android:textSize="35sp"
         android:textStyle="bold"/>

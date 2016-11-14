@@ -97,6 +97,7 @@ public class SplashActivity extends AppCompatActivity {
     private boolean isSystemApp(ApplicationInfo applicationInfo)
     {
         return ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM)!=0);
+
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

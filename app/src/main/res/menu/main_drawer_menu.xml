@@ -9,6 +9,11 @@
         <item android:title="Change Password"
             android:id="@+id/nav_change_password"/>
 
+        <item android:title="Best Practices"
+            android:id="@+id/nav_best_prac"/>
+
+
+
         <item android:id="@+id/nav_mail_me"
             android:title="Mail me"/>
 

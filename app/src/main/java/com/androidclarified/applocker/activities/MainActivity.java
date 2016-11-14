@@ -3,6 +3,7 @@ package com.androidclarified.applocker.activities;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,7 +35,7 @@ import com.androidclarified.applocker.utils.AppUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnAppCheckedListener,NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnAppCheckedListener, NavigationView.OnNavigationItemSelectedListener {
 
     private FloatingActionButton fab;
     private Toolbar toolbar;
@@ -44,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<AppBean> installedAppsList;
     private ArrayList<AppBean> appBeanList;
     private NavigationView navigationView;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private DrawerLayout drawerLayout;
     private ArrayList<OnRecieveAppCheckedListener> onRecieveAppCheckedListeners;
 
 
@@ -65,26 +70,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        navigationView= (NavigationView) findViewById(R.id.main_activity_navigation_menu);
+        navigationView = (NavigationView) findViewById(R.id.main_activity_navigation_menu);
         viewPager = (ViewPager) findViewById(R.id.main_view_pager);
         tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
-        toolbarHeading= (TextView) findViewById(R.id.main_activity_toolbar_text);
+        toolbarHeading = (TextView) findViewById(R.id.main_activity_toolbar_text);
         toolbarHeading.setTypeface(AppUtils.getFancyTextTypeface(this));
+        drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer);
         setSupportActionBar(toolbar);
         navigationView.setNavigationItemSelectedListener(this);
-        onRecieveAppCheckedListeners=new ArrayList<>();
+        onRecieveAppCheckedListeners = new ArrayList<>();
         initTabPager();
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initDrawerToggle();
 
         //Variables Instantion
 
 
     }
 
+    private void initDrawerToggle() {
+
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer) {
+
+
+            public void onDrawerClosed(View view) {
+                supportInvalidateOptionsMenu();
+                //drawerOpened = false;
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                supportInvalidateOptionsMenu();
+                //drawerOpened = true;
+            }
+        };
+
+        actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+
+    }
+
 
     private void initTabPager() {
-        mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), installedAppsList, allAppsList,this);
+        mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), installedAppsList, allAppsList, this);
         viewPager.setAdapter(mainPagerAdapter);
 
         tabLayout.setupWithViewPager(viewPager);
@@ -137,6 +167,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -148,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onAppChecked(String packageName) {
         for (OnRecieveAppCheckedListener onRecieveAppCheckedListener : onRecieveAppCheckedListeners) {
-            Log.d("Irshad","Informing Fragments");
+            Log.d("Irshad", "Informing Fragments");
             onRecieveAppCheckedListener.onAppCheckedReceived(packageName);
         }
 
@@ -156,10 +190,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Intent intent=new Intent(this, DrawerActivity.class);
+        Intent intent = new Intent(this, DrawerActivity.class);
 
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.nav_change_theme:
                 intent.setAction(DrawerActivity.THEME_CHANGE_ACTION);
                 startActivity(intent);
@@ -177,5 +210,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return false;
 
         }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 }

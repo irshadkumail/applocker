@@ -8,6 +8,8 @@ public interface AppConstants {
 
     public static final String LOCK_THEME_KEY="lock_key_theme";
 
+    public static final String PASSWORD_KEY="password_key";
+
 
     public static final int JET_BLACK_THEME=0;
 

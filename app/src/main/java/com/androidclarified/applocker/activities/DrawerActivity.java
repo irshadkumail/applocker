@@ -42,10 +42,8 @@ public class DrawerActivity extends AppCompatActivity {
         toolbarHeading= (TextView) findViewById(R.id.drawer_activity_heading);
         toolbar= (Toolbar) findViewById(R.id.drawer_activity_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
-
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
     }
     private Fragment getSelectedFragment()

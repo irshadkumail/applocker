@@ -23,6 +23,20 @@ public class AppSharedPreferences {
         editor.commit();
     }
 
+    public static void putPasswordSharedPreference(Context context,String password)
+    {
+
+        SharedPreferences sharedPreferences=context.getSharedPreferences(APP_PREFERENCE_FILE_NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString(AppConstants.PASSWORD_KEY,password);
+        editor.commit();
+    }
+    public static String getPasswordPreference(Context context)
+    {
+        SharedPreferences sharedPreferences=context.getSharedPreferences(APP_PREFERENCE_FILE_NAME,Context.MODE_PRIVATE);
+        return sharedPreferences.getString(AppConstants.PASSWORD_KEY,"0000");
+    }
+
     public static boolean getAppSharedPreference(Context context,String keyName)
     {
         SharedPreferences sharedPreferences=context.getSharedPreferences(APP_PREFERENCE_FILE_NAME,Context.MODE_PRIVATE);

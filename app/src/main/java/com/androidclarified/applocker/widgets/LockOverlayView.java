@@ -35,28 +35,37 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     private LayoutInflater layoutInflater;
     private RelativeLayout mainLayout;
     private ImageView lockIcon;
+    private TextView passwordHeadingText;
     private boolean isPasswordEntered;
-    private AppCheckerService appCheckerService;
+    // private AppCheckerService appCheckerService;
     private OverlayScreenListener overlayScreenListener;
 
+    private boolean isConfirmPasswordMode = false;
+    private String previousPassword;
+    private boolean confirmPasswordSecondEntry=false;
+
+
+    public LockOverlayView(Context context, boolean isConfirmPasswordMode) {
+        super(context);
+        this.isConfirmPasswordMode = isConfirmPasswordMode;
+        init();
+
+    }
 
     public LockOverlayView(Context context) {
         super(context);
-        appCheckerService = (AppCheckerService) context;
         init();
 
     }
 
     public LockOverlayView(Context context, AttributeSet attributeSet) {
-        super(context,attributeSet);
-        appCheckerService = (AppCheckerService) context;
+        super(context, attributeSet);
         init();
 
     }
 
-    public LockOverlayView(Context context, AttributeSet attributeSet,int tdef) {
-        super(context,attributeSet,tdef);
-        appCheckerService = (AppCheckerService) context;
+    public LockOverlayView(Context context, AttributeSet attributeSet, int tdef) {
+        super(context, attributeSet, tdef);
         init();
 
     }
@@ -76,9 +85,11 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     public void initButtons() {
         buttons = new TextView[11];
 
-        mainLayout= (RelativeLayout) findViewById(R.id.lock_overlay_main_layout);
+        passwordHeadingText = (TextView) findViewById(R.id.lock_overlay_password_heading_text);
+
+        mainLayout = (RelativeLayout) findViewById(R.id.lock_overlay_main_layout);
         passwordText = (TextView) findViewById(R.id.locker_overlay_text);
-        lockIcon= (ImageView) findViewById(R.id.lock_overlay_normal_icon);
+        lockIcon = (ImageView) findViewById(R.id.lock_overlay_normal_icon);
         buttons[0] = (TextView) findViewById(R.id.lock_overlay_zero);
         buttons[1] = (TextView) findViewById(R.id.lock_overlay_one);
         buttons[2] = (TextView) findViewById(R.id.lock_overlay_two);
@@ -90,6 +101,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
         buttons[8] = (TextView) findViewById(R.id.lock_overlay_eight);
         buttons[9] = (TextView) findViewById(R.id.lock_overlay_nine);
         buttons[10] = (TextView) findViewById(R.id.lock_overlay_backspace);
+        setPasswordHeadingText();
 
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setOnClickListener(this);
@@ -98,12 +110,18 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     }
 
-    public void setBackgroundColor()
-    {
+    private void setPasswordHeadingText() {
+        if (isConfirmPasswordMode)
+            passwordHeadingText.setText("Enter Password");
+        else
+            passwordHeadingText.setText("Password");
+    }
+
+    public void setBackgroundColor() {
         mainLayout.setBackgroundColor(AppUtils.getColor(getContext(), AppSharedPreferences.getLockThemePreference(getContext())));
     }
-    public void setImageIcon(String packName)
-    {
+
+    public void setImageIcon(String packName) {
         try {
             lockIcon.setImageDrawable(getContext().getPackageManager().getApplicationIcon(packName));
         } catch (PackageManager.NameNotFoundException e) {
@@ -114,7 +132,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        Log.d("Irshad", "Viewq Clicked");
+        Log.d("Irshad", "View Clicked");
         String text = passwordText.getText().toString();
         switch (v.getId()) {
             case R.id.lock_overlay_zero:
@@ -178,6 +196,36 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     }
 
     private void checkPassword(String text) {
+        if (isConfirmPasswordMode) {
+            checkForConfirmPasswordMode(text);
+        } else {
+            checkforEnterPasswordMode(text);
+        }
+    }
+
+    private void checkForConfirmPasswordMode(String text) {
+        if(!confirmPasswordSecondEntry)
+        {
+            passwordHeadingText.setText("Confirm Password");
+            previousPassword=text;
+            passwordText.setText("");
+            passwordText.setEnabled(true );
+            confirmPasswordSecondEntry=true;
+            Toast.makeText(getContext(),"",Toast.LENGTH_SHORT).show();
+        }else {
+            if (previousPassword.equalsIgnoreCase(text))
+            {
+                overlayScreenListener.hideOverlayForCorrectPassword();
+            }else {
+                passwordText.setText("");
+                Toast.makeText(getContext(),"Password does not match. Try Again!!",Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+    }
+
+    private void checkforEnterPasswordMode(String text) {
         if (text.equalsIgnoreCase("1234")) {
             AppCheckerService.isPasswordEntered = true;
             overlayScreenListener.hideOverlayScreen();

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ public class DrawerActivity extends AppCompatActivity {
 
     private FrameLayout drawerFrame;
     private TextView toolbarHeading;
+    private Toolbar toolbar;
     private String selectedAction="";
 
     public static final String THEME_CHANGE_ACTION="theme_change_action";
@@ -38,6 +40,12 @@ public class DrawerActivity extends AppCompatActivity {
     {
         drawerFrame= (FrameLayout) findViewById(R.id.drawer_activity_frame);
         toolbarHeading= (TextView) findViewById(R.id.drawer_activity_heading);
+        toolbar= (Toolbar) findViewById(R.id.drawer_activity_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
     private Fragment getSelectedFragment()
@@ -47,13 +55,11 @@ public class DrawerActivity extends AppCompatActivity {
         {
             case THEME_CHANGE_ACTION:
                 selectedFragment=new ChangeThemeFragment();
-                toolbarHeading.setText("Change Theme");
-                toolbarHeading.setTypeface(AppUtils.getPrimaryTextTypeface(this));
+                getSupportActionBar().setTitle("Change Theme");
                 break;
             case PASSWORD_CHANGE_ACTION:
                 selectedFragment=new ChangePasswordFragment();
-                toolbarHeading.setText("Change Password");
-                toolbarHeading.setTypeface(AppUtils.getPrimaryTextTypeface(this));
+                getSupportActionBar().setTitle("Change Password");
                 break;
 
         }

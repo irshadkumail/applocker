@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -31,7 +32,7 @@ import com.androidclarified.applocker.utils.AppUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnAppCheckedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnAppCheckedListener,NavigationView.OnNavigationItemSelectedListener {
 
     private FloatingActionButton fab;
     private Toolbar toolbar;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<AppBean> allAppsList;
     private ArrayList<AppBean> installedAppsList;
     private ArrayList<AppBean> appBeanList;
+    private NavigationView navigationView;
     private ArrayList<OnRecieveAppCheckedListener> onRecieveAppCheckedListeners;
 
 
@@ -63,11 +65,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        navigationView= (NavigationView) findViewById(R.id.main_activity_navigation_menu);
         viewPager = (ViewPager) findViewById(R.id.main_view_pager);
         tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
         toolbarHeading= (TextView) findViewById(R.id.main_activity_toolbar_text);
         toolbarHeading.setTypeface(AppUtils.getFancyTextTypeface(this));
         setSupportActionBar(toolbar);
+        navigationView.setNavigationItemSelectedListener(this);
         onRecieveAppCheckedListeners=new ArrayList<>();
         initTabPager();
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -148,5 +152,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             onRecieveAppCheckedListener.onAppCheckedReceived(packageName);
         }
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        Intent intent=new Intent(this, DrawerActivity.class);
+
+        switch (item.getItemId())
+        {
+            case R.id.nav_change_theme:
+                intent.setAction(DrawerActivity.THEME_CHANGE_ACTION);
+                startActivity(intent);
+                return false;
+            case R.id.nav_change_password:
+                intent.setAction(DrawerActivity.PASSWORD_CHANGE_ACTION);
+                startActivity(intent);
+                return false;
+            case R.id.nav_mail_me:
+                return false;
+            case R.id.nav_settings:
+                return false;
+
+            default:
+                return false;
+
+        }
     }
 }

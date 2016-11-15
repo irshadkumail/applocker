@@ -57,6 +57,22 @@ public class AppSharedPreferences {
         return sharedPreferences.getInt(AppConstants.LOCK_THEME_KEY,0);
     }
 
+    public static void setFirstTimePreference(Context context,boolean isFirst)
+    {
+        SharedPreferences sharedPreferences=context.getSharedPreferences(APP_PREFERENCE_FILE_NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean(AppConstants.FIRST_TIME_USER,isFirst);
+        editor.commit();
+
+    }
+    public static boolean getFirstTimePreference(Context context)
+    {
+        SharedPreferences sharedPreferences=context.getSharedPreferences(APP_PREFERENCE_FILE_NAME,Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(AppConstants.FIRST_TIME_USER,false);
+
+    }
+
+
 
 
 }

@@ -11,17 +11,19 @@ import android.widget.TextView;
 import com.androidclarified.applocker.R;
 import com.androidclarified.applocker.fragments.ChangePasswordFragment;
 import com.androidclarified.applocker.fragments.ChangeThemeFragment;
+import com.androidclarified.applocker.listeners.OverlayScreenListener;
 import com.androidclarified.applocker.utils.AppUtils;
 
 /**
  * Created by My Pc on 11/6/2016.
  */
 
-public class DrawerActivity extends AppCompatActivity {
+public class DrawerActivity extends AppCompatActivity implements OverlayScreenListener {
 
     private FrameLayout drawerFrame;
     private TextView toolbarHeading;
     private Toolbar toolbar;
+    Fragment selectedFragment=null;
     private String selectedAction="";
 
     public static final String THEME_CHANGE_ACTION="theme_change_action";
@@ -48,7 +50,7 @@ public class DrawerActivity extends AppCompatActivity {
     }
     private Fragment getSelectedFragment()
     {
-        Fragment selectedFragment=null;
+
         switch (selectedAction)
         {
             case THEME_CHANGE_ACTION:
@@ -71,6 +73,17 @@ public class DrawerActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void showOverlayScreen() {
+        ((ChangePasswordFragment)selectedFragment).showOverlay();
+
+    }
+
+    @Override
+    public void hideOverlayScreen() {
+        ((ChangePasswordFragment)selectedFragment).hideOverlay();
+        super.onBackPressed();
 
 
+    }
 }

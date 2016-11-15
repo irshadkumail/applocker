@@ -11,6 +11,8 @@ public interface AppConstants {
     public static final String PASSWORD_KEY="password_key";
 
 
+    public static final String FIRST_TIME_USER="first_time_user";
+
     public static final int JET_BLACK_THEME=0;
 
     public static final int TEAL_THEME=1;

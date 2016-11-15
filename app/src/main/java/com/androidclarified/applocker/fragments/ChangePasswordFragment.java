@@ -16,50 +16,39 @@ import com.androidclarified.applocker.widgets.LockOverlayView;
  * Created by My Pc on 11/6/2016.
  */
 
-public class ChangePasswordFragment extends Fragment implements OverlayScreenListener {
+public class ChangePasswordFragment extends Fragment {
 
     private FrameLayout changePasswordFrame;
     LockOverlayView lockOverlayView;
 
 
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup parent, Bundle bundle)
-    {
-        View rootView=layoutInflater.inflate(R.layout.fragment_change_password,parent,false);
-        changePasswordFrame=(FrameLayout) rootView.findViewById(R.id.fragment_change_password_frame);
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup parent, Bundle bundle) {
+        View rootView = layoutInflater.inflate(R.layout.fragment_change_password, parent, false);
+        changePasswordFrame = (FrameLayout) rootView.findViewById(R.id.fragment_change_password_frame);
         init();
 
 
         return rootView;
     }
-    public void init()
-    {
-        lockOverlayView=new LockOverlayView(getContext(),true);
-        addPasswordConfirmView();
 
-    }
-    private void addPasswordConfirmView()
-    {
-        lockOverlayView.setOverlayScreenListener(this);
-        changePasswordFrame.addView(lockOverlayView);
-
-
+    public void init() {
+        lockOverlayView = new LockOverlayView(getContext(), true);
+        showOverlay();
     }
 
 
-    @Override
-    public void showOverlayScreen() {
-
+    public void showOverlay() {
+        if (getActivity() != null) {
+            lockOverlayView.setOverlayScreenListener((OverlayScreenListener) getActivity());
+            changePasswordFrame.addView(lockOverlayView);
+        }
     }
 
-    @Override
-    public void hideOverlayScreen() {
 
-    }
-
-    @Override
-    public void hideOverlayForCorrectPassword() {
+    public void hideOverlay() {
         changePasswordFrame.removeView(lockOverlayView);
-        getActivity().onBackPressed();
-        Toast.makeText(getActivity(),"Password Changed",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Password Changed", Toast.LENGTH_SHORT).show();
     }
+
+
 }

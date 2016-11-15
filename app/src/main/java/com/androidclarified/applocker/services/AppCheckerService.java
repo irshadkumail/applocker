@@ -124,10 +124,6 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
 
     }
 
-    @Override
-    public void hideOverlayForCorrectPassword() {
-        windowManager.removeView(lockOverlayView);
-    }
 
     private class AppCheckerClass implements Runnable {
         @Override

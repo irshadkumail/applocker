@@ -10,6 +10,6 @@ public interface OverlayScreenListener {
 
     public void hideOverlayScreen();
 
-    public void hideOverlayForCorrectPassword();
+
 
 }

@@ -191,7 +191,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     private void checkForPasswordLength(final String string) {
         if (string.length() >= 4) {
-            //passwordText.setEnabled(false);
+            passwordText.setEnabled(false);
            handler.postDelayed(new Runnable() {
                @Override
                public void run() {
@@ -227,7 +227,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
             if (previousPassword.equalsIgnoreCase(text))
             {
                 AppSharedPreferences.putPasswordSharedPreference(getContext(),text);
-                overlayScreenListener.hideOverlayForCorrectPassword();
+                overlayScreenListener.hideOverlayScreen();
 
             }else {
                 passwordText.setText("");

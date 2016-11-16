@@ -1,10 +1,13 @@
 package com.androidclarified.applocker.activities;
 
+import android.annotation.TargetApi;
+import android.app.AppOpsManager;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -21,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.androidclarified.applocker.R;
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private TextView toolbarHeading;
+    private FrameLayout versionFrame;
     private MainPagerAdapter mainPagerAdapter;
     private ArrayList<AppBean> allAppsList;
     private ArrayList<AppBean> installedAppsList;
@@ -59,12 +64,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         createSeparateLists(appBeanList);
         initViews();
 
-
-        startService(new Intent(MainActivity.this, AppCheckerService.class));
+        startCheckingforApps();
 
     }
 
-    public void initViews() {
+    private void initOps() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            if (checkForPermission()) {
+                startCheckingforApps();
+            } else {
+                I
+
+            }
+        } else {
+            startCheckingforApps();
+        }
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private boolean checkForPermission() {
+        AppOpsManager appOpsManager = (AppOpsManager) getSystemService(APP_OPS_SERVICE);
+        int mode = appOpsManager.checkOp(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), getPackageName());
+        return (mode == AppOpsManager.MODE_ALLOWED);
+    }
+
+    private void startCheckingforApps() {
+        startService(new Intent(MainActivity.this, AppCheckerService.class));
+    }
+
+    private void initViews() {
 
         //Views Instantiation
 
@@ -75,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
         toolbarHeading = (TextView) findViewById(R.id.main_activity_toolbar_text);
         toolbarHeading.setTypeface(AppUtils.getFancyTextTypeface(this));
+        versionFrame = (FrameLayout) findViewById(R.id.activity_main_frame);
         drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer);
         setSupportActionBar(toolbar);
         navigationView.setNavigationItemSelectedListener(this);

@@ -142,10 +142,11 @@ public class SplashActivity extends AppCompatActivity implements OverlayScreenLi
 
     @Override
     public void hideOverlayScreen() {
-        changePasswordFragment.hideOverlay();
         Intent intent=new Intent(SplashActivity.this,MainActivity.class);
         intent.putExtra(APP_BEAN_LIST,appBeanList);
         startActivity(intent);
+        AppSharedPreferences.putFirstTimePreference(this,true);
+        changePasswordFragment.hideOverlay();
     }
 
 

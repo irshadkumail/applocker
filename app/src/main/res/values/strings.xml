@@ -3,6 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
+    <string name="permission_string">This app wont work if the following permssions are denied. Please make sure that you grant this permsission</string>
     <string-array name="drawer_list_array">
         <item>Change Theme</item>
         <item>Change Password</item>

@@ -9,12 +9,14 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,9 +28,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidclarified.applocker.R;
 import com.androidclarified.applocker.adapters.MainPagerAdapter;
+import com.androidclarified.applocker.fragments.PermissionFragment;
 import com.androidclarified.applocker.listeners.OnAppCheckedListener;
 import com.androidclarified.applocker.listeners.OnRecieveAppCheckedListener;
 import com.androidclarified.applocker.model.AppBean;
@@ -64,23 +68,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         createSeparateLists(appBeanList);
         initViews();
 
-        startCheckingforApps();
 
     }
 
-    private void initOps() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    public void onResume()
+    {
+        super.onResume();
+        Log.d("Irshad","Activity onResume()");
+        initPermission();
 
-            if (checkForPermission()) {
-                startCheckingforApps();
-            } else {
-                I
+    }
 
-            }
+    private void initPermission() {
+
+        if (!AppUtils.isUsagePermissionGranted(this) || !AppUtils.canDrawOverlay(this)) {
+            addFragment(new PermissionFragment());
         } else {
             startCheckingforApps();
         }
 
+    }
+
+    private void addFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.activity_main_frame, fragment);
+        fragmentTransaction.addToBackStack(PermissionFragment.PERMISSION_FRAG_TAG);
+        fragmentTransaction.commit();
+
+    }
+    public void removeFragment(Fragment fragment)
+    {
+        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

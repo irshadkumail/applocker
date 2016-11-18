@@ -20,6 +20,7 @@ import com.androidclarified.applocker.listeners.OverlayScreenListener;
 import com.androidclarified.applocker.services.AppCheckerService;
 import com.androidclarified.applocker.utils.AppSharedPreferences;
 import com.androidclarified.applocker.utils.AppUtils;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -34,7 +35,8 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     private TextView[] buttons;
     private LayoutInflater layoutInflater;
-    private RelativeLayout mainLayout;
+   // private RelativeLayout mainLayout;
+    private ImageView mainImage;
     private ImageView lockIcon;
     private TextView passwordHeadingText;
     private boolean isPasswordEntered;
@@ -90,7 +92,9 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
         passwordHeadingText = (TextView) findViewById(R.id.lock_overlay_password_heading_text);
 
-        mainLayout = (RelativeLayout) findViewById(R.id.lock_overlay_main_layout);
+       // mainLayout = (RelativeLayout) findViewById(R.id.lock_overlay_main_layout);
+        mainImage= (ImageView) findViewById(R.id.main_image);
+        Picasso.with(getContext()).load(R.drawable.demo_pic_three).fit().centerCrop().into(mainImage);
         passwordText = (TextView) findViewById(R.id.locker_overlay_text);
         lockIcon = (ImageView) findViewById(R.id.lock_overlay_normal_icon);
         buttons[0] = (TextView) findViewById(R.id.lock_overlay_zero);
@@ -122,7 +126,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     }
 
     public void setBackgroundColor() {
-        mainLayout.setBackgroundColor(AppUtils.getColor(getContext(), AppSharedPreferences.getLockThemePreference(getContext())));
+       // mainLayout.setBackgroundColor(AppUtils.getColor(getContext(), AppSharedPreferences.getLockThemePreference(getContext())));
     }
 
     public void setImageIcon(String packName) {

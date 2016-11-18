@@ -63,7 +63,7 @@ public class ChangeThemeAdapter extends RecyclerView.Adapter<ChangeThemeAdapter.
             public boolean onLongClick(View v) {
 
                 AppSharedPreferences.putLockThemePreference(context,position);
-                holder.themeImageLayout.setBackgroundColor(context.getResources().getColor(android.R.color.holo_red_light));
+                holder.themeImageLayout.setBackgroundColor(context.getResources().getColor(R.color.amber));
                 notifyItemChanged(selectedTheme);
                 selectedTheme=position;
                 Log.d("Irshad","Selected Theme"+selectedTheme);
@@ -75,7 +75,7 @@ public class ChangeThemeAdapter extends RecyclerView.Adapter<ChangeThemeAdapter.
     private void setImageHolderColour(ChangeThemeViewHolder holder,int position)
     {
         if(AppSharedPreferences.getLockThemePreference(context)==position) {
-            holder.themeImageLayout.setBackgroundColor(context.getResources().getColor(android.R.color.holo_red_light));
+            holder.themeImageLayout.setBackgroundColor(context.getResources().getColor(R.color.amber));
         }else {
             holder.themeImageLayout.setBackgroundColor(context.getResources().getColor(android.R.color.white));
         }

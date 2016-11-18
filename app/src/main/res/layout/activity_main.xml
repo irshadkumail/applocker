@@ -7,15 +7,17 @@
     android:id="@+id/activity_main_drawer"
     tools:context="com.androidclarified.applocker.activities.MainActivity">
 
+
+
+    <include
+        layout="@layout/app_bar_content_main"/>
+
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/activity_main_frame"
         />
-
-
-    <include
-        layout="@layout/app_bar_content_main"/>
 
     <android.support.design.widget.NavigationView
         android:layout_width="290dp"

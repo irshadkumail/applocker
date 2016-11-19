@@ -37,21 +37,12 @@ public class PermissionFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup parent, Bundle bundle) {
         View rootView = layoutInflater.inflate(R.layout.fragment_permission, parent, false);
         initViews(rootView);
+        checkForButtons();
 
 
         return rootView;
     }
 
-    public void onResume() {
-        super.onResume();
-        Log.d("Irshad","Fragment onResume()");
-        if (AppUtils.canDrawOverlay(getContext()) && AppUtils.isUsagePermissionGranted(getContext()))
-            ((MainActivity)getActivity()).removeFragment(this);
-        else
-            checkForButtons();
-
-
-    }
 
     private void initViews(View rootView) {
         usagePermBtn = (Button) rootView.findViewById(R.id.fragment_perm_usage_btn);
@@ -62,8 +53,7 @@ public class PermissionFragment extends Fragment implements View.OnClickListener
 
     }
 
-    private void checkForButtons()
-    {
+    private void checkForButtons() {
         if (AppUtils.isUsagePermissionGranted(getContext()))
             usagePermBtn.setVisibility(View.GONE);
 

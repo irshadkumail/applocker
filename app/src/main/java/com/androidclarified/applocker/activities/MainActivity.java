@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private DrawerLayout drawerLayout;
+    private PermissionFragment permissionFragment;
     private ArrayList<OnRecieveAppCheckedListener> onRecieveAppCheckedListeners;
 
 
@@ -74,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onResume()
     {
         super.onResume();
-        Log.d("Irshad","Activity onResume()");
         initPermission();
 
     }
@@ -82,8 +82,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initPermission() {
 
         if (!AppUtils.isUsagePermissionGranted(this) || !AppUtils.canDrawOverlay(this)) {
-            addFragment(new PermissionFragment());
+            addFragment(permissionFragment);
         } else {
+            removeFragment(permissionFragment);
             startCheckingforApps();
         }
 
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void addFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.activity_main_frame, fragment);
+        fragmentTransaction.replace(R.id.activity_main_frame, fragment);
         fragmentTransaction.addToBackStack(PermissionFragment.PERMISSION_FRAG_TAG);
         fragmentTransaction.commit();
 
@@ -118,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        permissionFragment=new PermissionFragment();
         navigationView = (NavigationView) findViewById(R.id.main_activity_navigation_menu);
         viewPager = (ViewPager) findViewById(R.id.main_view_pager);
         tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);

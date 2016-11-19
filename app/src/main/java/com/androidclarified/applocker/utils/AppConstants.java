@@ -10,6 +10,7 @@ public interface AppConstants {
 
     public static final String PASSWORD_KEY="password_key";
 
+    public static final int GALLERY_PICK=101;
 
     public static final String FIRST_TIME_USER="first_time_user";
 

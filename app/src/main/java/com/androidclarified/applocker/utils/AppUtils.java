@@ -17,6 +17,7 @@ import static com.androidclarified.applocker.utils.AppConstants.HOME_BLACK_THEME
 import static com.androidclarified.applocker.utils.AppConstants.HOME_BLUE_THEME;
 import static com.androidclarified.applocker.utils.AppConstants.JET_BLACK_THEME;
 import static com.androidclarified.applocker.utils.AppConstants.TEAL_THEME;
+import static com.androidclarified.applocker.utils.AppConstants.TRANSPARANT_GREY_THEME;
 
 /**
  * Created by krazybee on 11/11/2016.
@@ -63,6 +64,11 @@ public class AppUtils {
                 break;
             case DEEP_ORANGE_THEME:
                 selected = context.getResources().getColor(R.color.deep_orange);
+                break;
+            case TRANSPARANT_GREY_THEME:
+                selected=context.getResources().getColor(R.color.transparent_grey);
+                break;
+
 
         }
         return selected;

@@ -121,7 +121,7 @@
                 style="@style/lockerButtonStyle"
                 android:layout_margin="2dp"
                 android:background="@drawable/lock_overlay_normal_drawable"
-                android:text="*" />
+                android:text="C" />
         </TableRow>
     </TableLayout>
 

@@ -12,13 +12,22 @@
         android:id="@+id/change_theme_item_rl"
         android:background="@color/white_grey">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/change_theme_item_frame"
+            android:background="@color/jetblack"
+            android:layout_margin="7dp"
+            />
+
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="7dp"
             android:scaleType="fitXY"
             android:id="@+id/change_theme_item_image"
-            android:background="@color/jetblack"/>
+           />
 
     </RelativeLayout>
 

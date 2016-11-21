@@ -20,7 +20,9 @@ import android.widget.Toast;
 
 import com.androidclarified.applocker.R;
 import com.androidclarified.applocker.adapters.ChangeThemeAdapter;
+import com.androidclarified.applocker.listeners.OnThemeSelectedListener;
 import com.androidclarified.applocker.utils.AppConstants;
+import com.androidclarified.applocker.utils.AppSharedPreferences;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -29,7 +31,7 @@ import java.io.File;
  * Created by My Pc on 11/6/2016.
  */
 
-public class ChangeThemeFragment extends Fragment implements View.OnClickListener {
+public class ChangeThemeFragment extends Fragment implements View.OnClickListener,OnThemeSelectedListener {
 
     private RecyclerView themeRecycler;
     private ChangeThemeAdapter changeThemeAdapter;
@@ -47,6 +49,7 @@ public class ChangeThemeFragment extends Fragment implements View.OnClickListene
         pickGalleryButton = (Button) rootView.findViewById(R.id.fragment_theme_pick_gallery);
         themeRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         changeThemeAdapter = new ChangeThemeAdapter(getContext());
+        changeThemeAdapter.setOnThemeSelectedListener(this);
         themeRecycler.setNestedScrollingEnabled(false);
         themeRecycler.setAdapter(changeThemeAdapter);
         pickGalleryButton.setOnClickListener(this);
@@ -87,8 +90,8 @@ public class ChangeThemeFragment extends Fragment implements View.OnClickListene
                     Uri imageUri = resultData.getData();
                     Log.d("Irshad", imageUri.toString());
                     Log.d("Irshad"," File "+getFilePath(imageUri));
-                    File file=new File(getFilePath(imageUri));
-
+                    AppSharedPreferences.putGalleryImagePreferences(getContext(),getFilePath(imageUri));
+                    changeThemeAdapter.notifyItemChanged(9);
 
             }
 
@@ -109,5 +112,13 @@ public class ChangeThemeFragment extends Fragment implements View.OnClickListene
         }
         return path;
 
+    }
+    @Override
+    public void onThemeSelected(int position){
+
+        int selected=AppSharedPreferences.getLockThemePreference(getContext());
+        AppSharedPreferences.putLockThemePreference(getContext(), position);
+        changeThemeAdapter.notifyItemChanged(selected);
+        changeThemeAdapter.notifyItemChanged(position);
     }
 }

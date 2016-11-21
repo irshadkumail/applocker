@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +19,14 @@ import android.widget.Toast;
 import com.androidclarified.applocker.R;
 import com.androidclarified.applocker.listeners.OverlayScreenListener;
 import com.androidclarified.applocker.services.AppCheckerService;
+import com.androidclarified.applocker.utils.AppConstants;
 import com.androidclarified.applocker.utils.AppSharedPreferences;
 import com.androidclarified.applocker.utils.AppUtils;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
+
+import java.io.File;
 
 /**
  * Created by My Pc on 10/23/2016.
@@ -35,7 +39,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     private TextView[] buttons;
     private LayoutInflater layoutInflater;
-   // private RelativeLayout mainLayout;
+    private RelativeLayout mainLayout;
     private ImageView mainImage;
     private ImageView lockIcon;
     private TextView passwordHeadingText;
@@ -47,7 +51,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     private boolean isConfirmPasswordMode = false;
     private String previousPassword;
-    private boolean confirmPasswordSecondEntry=false;
+    private boolean confirmPasswordSecondEntry = false;
 
 
     public LockOverlayView(Context context, boolean isConfirmPasswordMode) {
@@ -92,9 +96,8 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
         passwordHeadingText = (TextView) findViewById(R.id.lock_overlay_password_heading_text);
 
-       // mainLayout = (RelativeLayout) findViewById(R.id.lock_overlay_main_layout);
-        mainImage= (ImageView) findViewById(R.id.main_image);
-        Picasso.with(getContext()).load(R.drawable.demo_pic_three).fit().centerCrop().into(mainImage);
+        mainLayout = (RelativeLayout) findViewById(R.id.lock_overlay_main_layout);
+        mainImage = (ImageView) findViewById(R.id.main_image);
         passwordText = (TextView) findViewById(R.id.locker_overlay_text);
         lockIcon = (ImageView) findViewById(R.id.lock_overlay_normal_icon);
         buttons[0] = (TextView) findViewById(R.id.lock_overlay_zero);
@@ -108,7 +111,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
         buttons[8] = (TextView) findViewById(R.id.lock_overlay_eight);
         buttons[9] = (TextView) findViewById(R.id.lock_overlay_nine);
         buttons[10] = (TextView) findViewById(R.id.lock_overlay_backspace);
-        handler=new Handler();
+        handler = new Handler();
         setPasswordHeadingText();
 
         for (int i = 0; i < buttons.length; i++) {
@@ -120,13 +123,21 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     private void setPasswordHeadingText() {
         if (isConfirmPasswordMode)
-            passwordHeadingText.setText("New Password");
+            passwordHeadingText.setText("Set Password");
         else
             passwordHeadingText.setText("Password");
     }
 
     public void setBackgroundColor() {
-       // mainLayout.setBackgroundColor(AppUtils.getColor(getContext(), AppSharedPreferences.getLockThemePreference(getContext())));
+        int themeIndex = AppSharedPreferences.getLockThemePreference(getContext());
+
+        if (themeIndex == AppConstants.GALLERY_THEME) {
+            File file = new File(AppSharedPreferences.getGalleryImagePreference(getContext()));
+            Picasso.with(getContext()).load("file://" + AppSharedPreferences.getGalleryImagePreference(getContext())).fit().centerCrop().into(mainImage);
+        } else {
+            mainLayout.setBackgroundColor(AppUtils.getColor(getContext(), themeIndex));
+            mainImage.setVisibility(GONE);
+        }
     }
 
     public void setImageIcon(String packName) {
@@ -142,47 +153,47 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     public void onClick(View v) {
         Log.d("Irshad", "View Clicked");
         String text = passwordText.getText().toString();
-        Log.d("Irshad", text.length()+" "+text);
+        Log.d("Irshad", text.length() + " " + text);
         switch (v.getId()) {
             case R.id.lock_overlay_zero:
                 passwordText.setText(text + "0");
-                checkForPasswordLength(text+"0");
+                checkForPasswordLength(text + "0");
                 break;
             case R.id.lock_overlay_one:
                 passwordText.setText(text + "1");
-                checkForPasswordLength(text+"1");
+                checkForPasswordLength(text + "1");
                 break;
             case R.id.lock_overlay_two:
                 passwordText.setText(text + "2");
-                checkForPasswordLength(text+"2");
+                checkForPasswordLength(text + "2");
                 break;
             case R.id.lock_overlay_three:
                 passwordText.setText(text + "3");
-                checkForPasswordLength(text+"3");
+                checkForPasswordLength(text + "3");
                 break;
             case R.id.lock_overlay_four:
                 passwordText.setText(text + "4");
-                checkForPasswordLength(text+"4");
+                checkForPasswordLength(text + "4");
                 break;
             case R.id.lock_overlay_five:
                 passwordText.setText(text + "5");
-                checkForPasswordLength(text+"5");
+                checkForPasswordLength(text + "5");
                 break;
             case R.id.lock_overlay_six:
                 passwordText.setText(text + "6");
-                checkForPasswordLength(text+"6");
+                checkForPasswordLength(text + "6");
                 break;
             case R.id.lock_overlay_seven:
                 passwordText.setText(text + "7");
-                checkForPasswordLength(text+"7");
+                checkForPasswordLength(text + "7");
                 break;
             case R.id.lock_overlay_eight:
                 passwordText.setText(text + "8");
-                checkForPasswordLength(text+"8");
+                checkForPasswordLength(text + "8");
                 break;
             case R.id.lock_overlay_nine:
                 passwordText.setText(text + "9");
-                checkForPasswordLength(text+"9");
+                checkForPasswordLength(text + "9");
                 break;
             case R.id.lock_overlay_backspace:
                 if (!text.isEmpty())
@@ -195,14 +206,14 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     private void checkForPasswordLength(final String string) {
         if (string.length() >= 4) {
-            passwordText.setEnabled(false);
-           handler.postDelayed(new Runnable() {
-               @Override
-               public void run() {
-                   checkPassword(string);
+            changeButtonsStatus(false);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkPassword(string);
 
-               }
-           },500);
+                }
+            }, 500);
         }
     }
 
@@ -219,37 +230,50 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     }
 
     private void checkForConfirmPasswordMode(String text) {
-        if(!confirmPasswordSecondEntry)
-        {
+        if (!confirmPasswordSecondEntry) {
             passwordHeadingText.setText("Confirm Password");
-            previousPassword=text;
+            previousPassword = text;
             passwordText.setText("");
-            passwordText.setEnabled(true);
-            confirmPasswordSecondEntry=true;
-            Toast.makeText(getContext(),""+previousPassword,Toast.LENGTH_SHORT).show();
-        }else {
-            if (previousPassword.equalsIgnoreCase(text))
-            {
-                AppSharedPreferences.putPasswordSharedPreference(getContext(),text);
+            changeButtonsStatus(true);
+            confirmPasswordSecondEntry = true;
+            Toast.makeText(getContext(), "" + previousPassword, Toast.LENGTH_SHORT).show();
+        } else {
+            if (previousPassword.equalsIgnoreCase(text)) {
+                AppSharedPreferences.putPasswordSharedPreference(getContext(), text);
+                changeButtonsStatus(true);
+                
                 overlayScreenListener.hideOverlayScreen();
 
-            }else {
+            } else {
                 passwordText.setText("");
-                Toast.makeText(getContext(),"Password does not match. Try Again!!",Toast.LENGTH_SHORT).show();
+                changeButtonsStatus(true);
+                Toast.makeText(getContext(), "Password does not match. Try Again!!", Toast.LENGTH_SHORT).show();
             }
         }
 
     }
 
+
     private void checkforEnterPasswordMode(String text) {
         if (text.equalsIgnoreCase(AppSharedPreferences.getPasswordPreference(getContext()))) {
             AppCheckerService.isPasswordEntered = true;
+            changeButtonsStatus(true);
             overlayScreenListener.hideOverlayScreen();
             passwordText.setText("");
         } else {
-            passwordText.setEnabled(true);
+            changeButtonsStatus(true);
             passwordText.setText("");
             Toast.makeText(getContext(), "Wrong Password", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void changeButtonsStatus(boolean status) {
+        for (int i = 0; i < buttons.length; i++) {
+            if (status)
+                buttons[i].setOnClickListener(this);
+            else
+                buttons[i].setOnClickListener(null);
         }
 
     }

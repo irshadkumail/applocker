@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import static com.androidclarified.applocker.utils.AppConstants.APP_PREFERENCE_FILE_NAME;
+import static com.androidclarified.applocker.utils.AppConstants.GALLERY_IMAGE;
+
 /**
  * Created by My Pc on 10/23/2016.
  */
@@ -11,8 +14,19 @@ import android.util.Log;
 public class AppSharedPreferences {
 
 
-    public static final String APP_PREFERENCE_FILE_NAME="com.androidclarified.applocker.preferences";
 
+    public static void putGalleryImagePreferences(Context context,String imagePath)
+    {
+        SharedPreferences sharedPreferences=context.getSharedPreferences(APP_PREFERENCE_FILE_NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString(AppConstants.GALLERY_IMAGE,imagePath);
+        editor.commit();
+    }
+    public static String getGalleryImagePreference(Context context)
+    {
+        SharedPreferences sharedPreferences=context.getSharedPreferences(APP_PREFERENCE_FILE_NAME,Context.MODE_PRIVATE);
+        return sharedPreferences.getString(GALLERY_IMAGE,"");
+    }
 
     public static void putAppSharedPreferences(Context context,String keyName,boolean keyValue)
     {

@@ -1,14 +1,17 @@
 package com.androidclarified.applocker.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,6 +39,9 @@ public class ChangeThemeFragment extends Fragment implements View.OnClickListene
     private RecyclerView themeRecycler;
     private ChangeThemeAdapter changeThemeAdapter;
     private Button pickGalleryButton;
+    private static final int STORAGE_REQUEST_CODE=1001;
+
+
 
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup parent, Bundle bundle) {
         View rootView = layoutInflater.inflate(R.layout.fragment_theme_change, parent, false);
@@ -63,7 +69,10 @@ public class ChangeThemeFragment extends Fragment implements View.OnClickListene
 
         switch (v.getId()) {
             case R.id.fragment_theme_pick_gallery:
-                pickPhoto();
+                if ((ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED)&& ContextCompat.checkSelfPermission(getContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED)
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},STORAGE_REQUEST_CODE);
+                else
+                    pickPhoto();
                 break;
 
         }
@@ -83,6 +92,22 @@ public class ChangeThemeFragment extends Fragment implements View.OnClickListene
         }
     }
 
+    public void onRequestPermissionsResult(int requestCode,String[] permission,int[] grantResults)
+    {
+        switch (requestCode)
+        {
+            case STORAGE_REQUEST_CODE:
+                if (grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED)
+                    pickPhoto();
+                else
+                    Toast.makeText(getContext(),"Permission Denied",Toast.LENGTH_SHORT).show();
+                break;
+
+        }
+
+    }
+
+
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
@@ -91,7 +116,7 @@ public class ChangeThemeFragment extends Fragment implements View.OnClickListene
                     Log.d("Irshad", imageUri.toString());
                     Log.d("Irshad"," File "+getFilePath(imageUri));
                     AppSharedPreferences.putGalleryImagePreferences(getContext(),getFilePath(imageUri));
-                    changeThemeAdapter.notifyItemChanged(9);
+                    changeThemeAdapter.notifyItemChanged(AppConstants.GALLERY_THEME);
 
             }
 

@@ -2,6 +2,7 @@ package com.androidclarified.applocker.services;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.app.Notification;
 import android.app.Service;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
@@ -11,12 +12,14 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.androidclarified.applocker.R;
 import com.androidclarified.applocker.listeners.OverlayScreenListener;
 import com.androidclarified.applocker.utils.AppSharedPreferences;
 import com.androidclarified.applocker.widgets.LockOverlayView;
@@ -45,6 +48,20 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
     public static boolean isDialogVisile = false;
     public static boolean isPasswordEntered = false;
 
+
+
+    public void onCreate()
+    {
+        super.onCreate();
+        Notification notification=new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.applock_icon)
+                .setContentTitle("App Locker")
+                .setContentText("Your apps are protected").build();
+
+
+        startForeground(1002,notification);
+
+    }
 
 
     @Nullable

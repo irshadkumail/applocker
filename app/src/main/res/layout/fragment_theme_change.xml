@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,14 +14,14 @@
             android:layout_height="wrap_content" />
 
         <Button
+            android:id="@+id/fragment_theme_pick_gallery"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="5dp"
             android:layout_marginTop="10dp"
-            android:id="@+id/fragment_theme_pick_gallery"
             android:background="@drawable/generic_button_drawable"
             android:text="PICK FROM GALLERY"
             android:textColor="@color/white" />
 
     </LinearLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

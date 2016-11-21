@@ -12,15 +12,14 @@
     <include
         layout="@layout/app_bar_content_main"/>
 
-
-
-
     <android.support.design.widget.NavigationView
         android:layout_width="290dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_drawer_header"
         app:menu="@menu/main_drawer_menu"
+        app:itemBackground="?attr/selectableItemBackground"
+        android:background="?attr/selectableItemBackground"
         android:id="@+id/main_activity_navigation_menu"
         />
 

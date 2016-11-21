@@ -1,7 +1,11 @@
 package com.androidclarified.applocker.activities;
 
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
 import android.app.AppOpsManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -60,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout drawerLayout;
     private PermissionFragment permissionFragment;
     private ArrayList<OnRecieveAppCheckedListener> onRecieveAppCheckedListeners;
+    public PendingIntent pendingIntent;
+    public AlarmManager alarmManager;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         appBeanList = getIntent().getExtras().getParcelableArrayList(SplashActivity.APP_BEAN_LIST);
         createSeparateLists(appBeanList);
         initViews();
+
 
 
     }
@@ -111,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startCheckingforApps() {
         startService(new Intent(MainActivity.this, AppCheckerService.class));
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),(1000)*(60)*(10),pendingIntent);
     }
 
     private void initViews() {
@@ -134,6 +142,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initDrawerToggle();
+
+        Intent intent=new Intent(this,AlarmBroadcastReceiver.class);
+        pendingIntent=PendingIntent.getBroadcast(this,0,intent,0);
+        alarmManager= (AlarmManager) getSystemService(ALARM_SERVICE);
+
 
         //Variables Instantion
 
@@ -273,5 +286,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         actionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    public static class AlarmBroadcastReceiver extends BroadcastReceiver
+    {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+
+        }
     }
 }

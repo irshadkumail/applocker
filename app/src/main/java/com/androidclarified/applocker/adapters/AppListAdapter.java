@@ -60,7 +60,23 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.AppItemV
         holder.appLabel.setText(appBeanList.get(position).getAppLabel());
         holder.imageIcon.setImageDrawable(getImageIcon(appBeanList.get(position).getPackName()));
         holder.checkBox.setChecked(AppSharedPreferences.getAppSharedPreference(context,appBeanList.get(position).getPackName()));
-        Log.d("Irshad","Binding View");
+
+        holder.container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                boolean value=appBeanList.get(position).isChecked();
+                if(value)
+                    appBeanList.get(position).setChecked(false);
+                else
+                    appBeanList.get(position).setChecked(true);
+
+                Log.d("Irshad","Check Changed "+appBeanList.get(position).isChecked());
+                AppSharedPreferences.putAppSharedPreferences(context,appBeanList.get(position).getPackName(),appBeanList.get(position).isChecked());
+                onAppCheckedListener.onAppChecked(appBeanList.get(position).getPackName());
+
+            }
+        });
 
     }
 
@@ -85,11 +101,13 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.AppItemV
         TextView appLabel;
         ImageView imageIcon;
         CheckBox checkBox;
+        View container;
 
 
         AppItemViewHolder(View view) {
             super(view);
 
+            container=view;
             appLabel = (TextView) view.findViewById(R.id.app_item_vh_label);
             imageIcon= (ImageView) view.findViewById(R.id.app_item_vh_icon);
             checkBox= (CheckBox) view.findViewById(R.id.app_item_vh_checkbox);
@@ -101,15 +119,7 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.AppItemV
 
         @Override
         public void onClick(View v) {
-            boolean value=appBeanList.get(getPosition()).isChecked();
-            if(value)
-                appBeanList.get(getPosition()).setChecked(false);
-            else
-                appBeanList.get(getPosition()).setChecked(true);
 
-            Log.d("Irshad","Check Changed "+appBeanList.get(getPosition()).isChecked());
-            AppSharedPreferences.putAppSharedPreferences(context,appBeanList.get(getPosition()).getPackName(),appBeanList.get(getPosition()).isChecked());
-            onAppCheckedListener.onAppChecked(appBeanList.get(getPosition()).getPackName());
         }
     }
 

@@ -37,7 +37,6 @@ public class PermissionFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup parent, Bundle bundle) {
         View rootView = layoutInflater.inflate(R.layout.fragment_permission, parent, false);
         initViews(rootView);
-        checkForButtons();
 
 
         return rootView;
@@ -50,7 +49,12 @@ public class PermissionFragment extends Fragment implements View.OnClickListener
         usagePermBtn.setOnClickListener(this);
         drawPermBtn.setOnClickListener(this);
 
+    }
 
+    public void onResume()
+    {
+        super.onResume();
+        checkForButtons();
     }
 
     private void checkForButtons() {

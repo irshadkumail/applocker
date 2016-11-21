@@ -12,10 +12,11 @@
         <item android:title="Best Practices"
             android:id="@+id/nav_best_prac"/>
 
-
-
         <item android:id="@+id/nav_mail_me"
             android:title="Mail me"/>
+
+        <item android:id="@+id/nav_permissions"
+            android:title="Check Permissions"/>
 
         <item android:id="@+id/nav_settings"
             android:title="Settings"/>

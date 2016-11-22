@@ -82,7 +82,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     public void init() {
         layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        layoutInflater.inflate(R.layout.lock_overlay_normal_screen, this, true);
+        layoutInflater.inflate(R.layout.lock_overlay_screen_theme_one, this, true);
         initButtons();
 
     }

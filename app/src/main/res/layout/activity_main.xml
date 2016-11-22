@@ -18,8 +18,7 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_drawer_header"
         app:menu="@menu/main_drawer_menu"
-        app:itemBackground="?attr/selectableItemBackground"
-        android:background="?attr/selectableItemBackground"
+        app:itemBackground="@drawable/menu_item_ripple"
         android:id="@+id/main_activity_navigation_menu"
         />
 

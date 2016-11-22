@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/first"
+        android:checkableBehavior="single">
 
         <item android:title="Change Theme"
             android:id="@+id/nav_change_theme"/>
@@ -12,17 +14,33 @@
         <item android:title="Best Practices"
             android:id="@+id/nav_best_prac"/>
 
-        <item android:id="@+id/nav_mail_me"
-            android:title="Mail me"/>
+        <item android:id="@+id/nav_change_buttons"
+            android:title="Button Theme"/>
+
 
         <item android:id="@+id/nav_permissions"
             android:title="Check Permissions"/>
 
-        <item android:id="@+id/nav_settings"
-            android:title="Settings"/>
-
-
 
     </group>
+
+        <group android:id="@+id/second"
+            android:checkableBehavior="single">
+
+            <item android:id="@+id/nav_service_switch"
+                android:title="Enable Applock"
+                app:showAsAction="always"
+                app:actionLayout="@layout/drawe_item_lock_switch"/>
+            <item android:id="@+id/nav_mail_me"
+                android:title="Mail me"/>
+
+            <item android:id="@+id/nav_settings"
+                android:title="Settings"/>
+
+        </group>
+
+
+
+
 
 </menu>

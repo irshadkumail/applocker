@@ -26,9 +26,10 @@
         android:layout_width="match_parent"
         android:layout_height="290dp"
         android:layout_alignParentBottom="true"
-        android:stretchColumns="*">
+        android:stretchColumns="*"
+        >
 
-        <TableRow>
+        <TableRow >
 
             <TextView
                 android:id="@+id/lock_overlay_one"

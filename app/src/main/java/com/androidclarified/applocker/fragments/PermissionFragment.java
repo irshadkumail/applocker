@@ -79,6 +79,9 @@ public class PermissionFragment extends Fragment implements View.OnClickListener
                     Toast.makeText(getContext(), "Do it yourself!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.fragment_perm_draw_btn:
+                Intent overlayIntent=new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                if (overlayIntent.resolveActivity(getContext().getPackageManager())!=null)
+                    startActivity(overlayIntent);
                 break;
 
         }

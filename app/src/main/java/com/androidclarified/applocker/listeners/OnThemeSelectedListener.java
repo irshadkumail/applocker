@@ -8,4 +8,6 @@ public interface OnThemeSelectedListener {
 
     public void onThemeSelected(int position);
 
+    public void onAddGallery(int position);
+
 }

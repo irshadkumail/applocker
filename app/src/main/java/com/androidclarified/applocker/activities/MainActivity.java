@@ -25,12 +25,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,9 +50,10 @@ import com.androidclarified.applocker.utils.AppUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnAppCheckedListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnAppCheckedListener, NavigationView.OnNavigationItemSelectedListener,CompoundButton.OnCheckedChangeListener {
 
     private FloatingActionButton fab;
+    private SwitchCompat startSwitch;
     private Toolbar toolbar;
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -62,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private DrawerLayout drawerLayout;
+    private Intent serviceIntent;
     private PermissionFragment permissionFragment;
     private ArrayList<OnRecieveAppCheckedListener> onRecieveAppCheckedListeners;
     public PendingIntent pendingIntent;
@@ -92,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             addFragment(permissionFragment);
         } else {
             removeFragment(permissionFragment);
-            startCheckingforApps();
         }
 
     }
@@ -117,8 +121,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startCheckingforApps() {
-        startService(new Intent(MainActivity.this, AppCheckerService.class));
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),(1000)*(60)*(10),pendingIntent);
+        startService(serviceIntent);
+      //  alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),(1000)*(60)*(10),pendingIntent);
+    }
+    private void stopAppCheck()
+    {
+        stopService(serviceIntent);
+       // alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),(1000)*(60)*(10),pendingIntent);
+
     }
 
     private void initViews() {
@@ -129,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         permissionFragment=new PermissionFragment();
         navigationView = (NavigationView) findViewById(R.id.main_activity_navigation_menu);
+        startSwitch= (SwitchCompat) navigationView.getMenu().findItem(R.id.nav_service_switch).getActionView();
         viewPager = (ViewPager) findViewById(R.id.main_view_pager);
         tabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
         toolbarHeading = (TextView) findViewById(R.id.main_activity_toolbar_text);
@@ -137,15 +148,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer);
         setSupportActionBar(toolbar);
         navigationView.setNavigationItemSelectedListener(this);
+        startSwitch.setOnCheckedChangeListener(this);
         onRecieveAppCheckedListeners = new ArrayList<>();
         initTabPager();
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initDrawerToggle();
+        serviceIntent=new Intent(MainActivity.this, AppCheckerService.class);
+
 
         Intent intent=new Intent(this,AlarmBroadcastReceiver.class);
         pendingIntent=PendingIntent.getBroadcast(this,0,intent,0);
         alarmManager= (AlarmManager) getSystemService(ALARM_SERVICE);
+        if (AppCheckerService.isServiceRunning)
+            startSwitch.setChecked(true);
 
 
         //Variables Instantion
@@ -286,6 +302,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         actionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+        if (isChecked)
+        {
+            startCheckingforApps();
+        }else
+        {
+           stopAppCheck();
+        }
+
     }
 
     public static class AlarmBroadcastReceiver extends BroadcastReceiver

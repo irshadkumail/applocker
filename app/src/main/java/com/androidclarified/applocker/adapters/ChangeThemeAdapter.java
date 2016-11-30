@@ -36,7 +36,7 @@ import static com.androidclarified.applocker.utils.AppConstants.TEAL_THEME;
  * Created by My Pc on 11/6/2016.
  */
 
-public class ChangeThemeAdapter extends RecyclerView.Adapter<ChangeThemeAdapter.ChangeThemeViewHolder> {
+public class ChangeThemeAdapter extends RecyclerView.Adapter<ChangeThemeAdapter.ChangeThemeViewHolder> implements View.OnClickListener {
 
     private LayoutInflater layoutInflater;
     private Context context;
@@ -67,12 +67,12 @@ public class ChangeThemeAdapter extends RecyclerView.Adapter<ChangeThemeAdapter.
     public void onBindViewHolder(ChangeThemeViewHolder holder, final int position) {
 
         if (position == AppConstants.GALLERY_THEME) {
-            Log.d("Irshad","Gallery "+position);
+            holder.addGallery.setVisibility(View.VISIBLE);
+            holder.addGallery.setOnClickListener(this);
             holder.themeColourFrame.setVisibility(View.GONE);
             holder.themeImage.setVisibility(View.VISIBLE);
             Picasso.with(context).load("file://"+AppSharedPreferences.getGalleryImagePreference(context)).centerCrop().fit().into(holder.themeImage);
         } else {
-            Log.d("Irshad","Normal "+position);
             holder.themeImage.setVisibility(View.GONE);
             holder.themeColourFrame.setVisibility(View.VISIBLE);
             holder.themeColourFrame.setBackgroundColor(AppUtils.getColor(context, position));
@@ -84,11 +84,6 @@ public class ChangeThemeAdapter extends RecyclerView.Adapter<ChangeThemeAdapter.
 
 
                 onThemeSelectedListener.onThemeSelected(position);
-                /*AppSharedPreferences.putLockThemePreference(context, position);
-                holder.themeImageLayout.setBackgroundColor(context.getResources().getColor(R.color.amber));
-                notifyItemChanged(selectedTheme);
-                selectedTheme = position;
-                Log.d("Irshad", "Selected Theme" + selectedTheme);*/
                 return false;
             }
         });
@@ -110,8 +105,22 @@ public class ChangeThemeAdapter extends RecyclerView.Adapter<ChangeThemeAdapter.
         return 10;
     }
 
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId())
+        {
+            case R.id.change_theme_add_galley:
+                onThemeSelectedListener.onAddGallery(9);
+                break;
+
+
+        }
+
+    }
+
     public class ChangeThemeViewHolder extends RecyclerView.ViewHolder {
-        ImageView themeImage;
+        ImageView themeImage,addGallery;
         FrameLayout themeColourFrame;
         RelativeLayout themeImageLayout;
 
@@ -121,6 +130,7 @@ public class ChangeThemeAdapter extends RecyclerView.Adapter<ChangeThemeAdapter.
             themeImage = (ImageView) view.findViewById(R.id.change_theme_item_image);
             themeColourFrame= (FrameLayout) view.findViewById(R.id.change_theme_item_frame);
             themeImageLayout = (RelativeLayout) view.findViewById(R.id.change_theme_item_rl);
+            addGallery= (ImageView) view.findViewById(R.id.change_theme_add_galley);
 
 
         }

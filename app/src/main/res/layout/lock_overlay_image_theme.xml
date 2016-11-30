@@ -22,15 +22,10 @@
         android:src="@drawable/lock_icon" />
 
     <FrameLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lock_button_table"
         android:layout_alignParentBottom="true">
-
-        <include
-            android:id="@+id/normal_button_table_tl"
-            layout="@layout/normal_button_table"
-            />
 
         <include
             android:id="@+id/theme_button_table_tl"

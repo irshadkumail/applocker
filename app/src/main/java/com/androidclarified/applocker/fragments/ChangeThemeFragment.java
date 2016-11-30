@@ -58,6 +58,7 @@ public class ChangeThemeFragment extends Fragment implements View.OnClickListene
         changeThemeAdapter.setOnThemeSelectedListener(this);
         themeRecycler.setNestedScrollingEnabled(false);
         themeRecycler.setAdapter(changeThemeAdapter);
+        pickGalleryButton.setVisibility(View.GONE);
         pickGalleryButton.setOnClickListener(this);
 
 
@@ -69,10 +70,7 @@ public class ChangeThemeFragment extends Fragment implements View.OnClickListene
 
         switch (v.getId()) {
             case R.id.fragment_theme_pick_gallery:
-                if ((ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED)&& ContextCompat.checkSelfPermission(getContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED)
-                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},STORAGE_REQUEST_CODE);
-                else
-                    pickPhoto();
+
                 break;
 
         }
@@ -145,5 +143,13 @@ public class ChangeThemeFragment extends Fragment implements View.OnClickListene
         AppSharedPreferences.putLockThemePreference(getContext(), position);
         changeThemeAdapter.notifyItemChanged(selected);
         changeThemeAdapter.notifyItemChanged(position);
+    }
+
+    @Override
+    public void onAddGallery(int position) {
+        if ((ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED)&& ContextCompat.checkSelfPermission(getContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},STORAGE_REQUEST_CODE);
+        else
+            pickPhoto();
     }
 }

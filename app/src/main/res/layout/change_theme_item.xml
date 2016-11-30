@@ -12,11 +12,15 @@
         android:id="@+id/change_theme_item_rl"
         android:background="@color/white_grey">
 
+
+
+
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/change_theme_item_frame"
-            android:background="@color/jetblack"
+            android:background="@color/white"
             android:layout_margin="7dp"
             />
 
@@ -28,6 +32,14 @@
             android:scaleType="fitXY"
             android:id="@+id/change_theme_item_image"
            />
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/add_gallery"
+            android:tint="@color/grey_color"
+            android:visibility="gone"
+            android:id="@+id/change_theme_add_galley"/>
 
     </RelativeLayout>
 

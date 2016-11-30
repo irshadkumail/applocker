@@ -39,7 +39,9 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
     public String PREVIOUS_PACKAGE_NAME = "";
     public String RUNNING_PACKAGE_NAME = "";
     private Handler handler;
+
     private AppCheckerClass appCheckerClass;
+
 
     private WindowManager windowManager;
     private WindowManager.LayoutParams windowParams;
@@ -47,6 +49,7 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
 
     public static boolean isDialogVisile = false;
     public static boolean isPasswordEntered = false;
+    public static boolean isServiceRunning=false;
 
 
 
@@ -74,14 +77,14 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
     public int onStartCommand(Intent intent, int startid, int flags) {
         appCheckerClass = new AppCheckerClass();
         handler = new Handler();
-        lockOverlayView = new LockOverlayView(this);
-        lockOverlayView.setOverlayScreenListener(this);
+        isServiceRunning=true;
+
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         windowParams = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSLUCENT);
 
 
-        Log.d("Irshad", "Service Started");
+        Toast.makeText(this,"Checking Apps",Toast.LENGTH_SHORT).show();
 
 
         handler.post(appCheckerClass);
@@ -126,18 +129,30 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
 
     @Override
     public void showOverlayScreen() {
+        lockOverlayView = new LockOverlayView(this);
+        lockOverlayView.setOverlayScreenListener(this);
         lockOverlayView.setImageIcon(RUNNING_PACKAGE_NAME);
         lockOverlayView.setBackgroundColor();
         windowManager.addView(lockOverlayView, windowParams);
+        lockOverlayView.slideUpAnimation();
         AppCheckerService.isDialogVisile = true;
     }
 
     @Override
     public void hideOverlayScreen() {
 
+        lockOverlayView.slideDownAnimation();
         windowManager.removeView(lockOverlayView);
         AppCheckerService.isPasswordEntered = false;
         AppCheckerService.isDialogVisile = false;
+
+    }
+
+    public void onDestroy()
+    {
+        super.onDestroy();
+        Toast.makeText(this,"Service Stopped",Toast.LENGTH_SHORT).show();
+        isServiceRunning=false;
 
     }
 

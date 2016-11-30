@@ -4,12 +4,12 @@
 
     <solid android:color="#73191919"/>
 
-    <size android:width="77dp" android:height="77dp"/>
+    <size android:width="72dp" android:height="72dp"/>
 
 
 
     <padding android:bottom="5dp" android:left="5dp" android:right="5dp" android:top="5dp"/>
 
-    <stroke android:color="@color/white" android:width="1dp"/>
+    <stroke android:color="@color/white" android:width="0.6dp"/>
 
 </shape>

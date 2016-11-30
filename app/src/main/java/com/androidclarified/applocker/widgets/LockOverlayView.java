@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -82,8 +84,17 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     public void init() {
         layoutInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        layoutInflater.inflate(R.layout.lock_overlay_screen_theme_one, this, true);
+        inflateTheme();
         initButtons();
+    }
+    private void inflateTheme()
+    {
+        int themeIndex = AppSharedPreferences.getLockThemePreference(getContext());
+
+        if (themeIndex==AppConstants.GALLERY_THEME)
+            layoutInflater.inflate(R.layout.lock_overlay_image_theme, this, true);
+        else
+            layoutInflater.inflate(R.layout.lock_overlay_normal,this,true);
 
     }
 
@@ -114,10 +125,31 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
         handler = new Handler();
         setPasswordHeadingText();
 
+
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setOnClickListener(this);
         }
 
+
+    }
+
+    public void slideUpAnimation()
+    {
+        Animation animation= AnimationUtils.loadAnimation(getContext(),R.anim.slide_up);
+
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].startAnimation(animation);
+        }
+
+    }
+
+    public void slideDownAnimation()
+    {
+        Animation animation= AnimationUtils.loadAnimation(getContext(),R.anim.slide_down);
+
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].startAnimation(animation);
+        }
 
     }
 
@@ -250,6 +282,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
                 Toast.makeText(getContext(), "Password does not match. Try Again!!", Toast.LENGTH_SHORT).show();
             }
         }
+
 
     }
 

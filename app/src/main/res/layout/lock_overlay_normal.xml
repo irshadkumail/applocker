@@ -32,9 +32,7 @@
             layout="@layout/normal_button_table"
             />
 
-        <include
-            android:id="@+id/theme_button_table_tl"
-            layout="@layout/theme_button_layout" />
+
     </FrameLayout>
 
     <include

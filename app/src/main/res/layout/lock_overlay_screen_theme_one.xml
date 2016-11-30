@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:foregroundGravity="fill"
+        android:background="@drawable/demo_pic"
         android:id="@+id/main_image"/>
 
     <ImageView
@@ -35,21 +36,30 @@
             <TextView
                 android:id="@+id/lock_overlay_one"
                 style="@style/lockerButtonStyle"
-                android:layout_margin="7dp"
+                android:layout_margin="5dp"
+                android:typeface="sans"
+                android:textSize="36sp"
                 android:background="@drawable/button_theme_light_black"
                 android:text="1" />
 
             <TextView
                 android:id="@+id/lock_overlay_two"
                 style="@style/lockerButtonStyle"
-                android:layout_margin="7dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:typeface="sans"
+                android:textSize="36sp"
                 android:background="@drawable/button_theme_light_black"
                 android:text="2" />
 
             <TextView
                 android:id="@+id/lock_overlay_three"
                 style="@style/lockerButtonStyle"
-                android:layout_margin="7dp"
+                android:layout_margin="5dp"
+                android:typeface="sans"
+                android:textSize="36sp"
                 android:background="@drawable/button_theme_light_black"
                 android:text="3" />
         </TableRow>
@@ -59,21 +69,30 @@
             <TextView
                 android:id="@+id/lock_overlay_four"
                 style="@style/lockerButtonStyle"
-                android:layout_margin="7dp"
+                android:layout_margin="5dp"
+                android:typeface="sans"
+                android:textSize="36sp"
                 android:background="@drawable/button_theme_light_black"
                 android:text="4" />
 
             <TextView
                 android:id="@+id/lock_overlay_five"
                 style="@style/lockerButtonStyle"
-                android:layout_margin="7dp"
+                android:typeface="sans"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="7dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:textSize="36sp"
                 android:background="@drawable/button_theme_light_black"
                 android:text="5" />
 
             <TextView
                 android:id="@+id/lock_overlay_six"
                 style="@style/lockerButtonStyle"
-                android:layout_margin="7dp"
+                android:layout_margin="5dp"
+                android:typeface="sans"
+                android:textSize="36sp"
                 android:background="@drawable/button_theme_light_black"
                 android:text="6" />
         </TableRow>
@@ -83,22 +102,31 @@
             <TextView
                 android:id="@+id/lock_overlay_seven"
                 style="@style/lockerButtonStyle"
-                
-                android:layout_margin="7dp"
+                android:typeface="sans"
+                android:textSize="36sp"
+
+                android:layout_margin="5dp"
                 android:background="@drawable/button_theme_light_black"
                 android:text="7" />
 
             <TextView
                 android:id="@+id/lock_overlay_eight"
                 style="@style/lockerButtonStyle"
-                android:layout_margin="7dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:textSize="36sp"
+                android:typeface="sans"
                 android:background="@drawable/button_theme_light_black"
                 android:text="8" />
 
             <TextView
                 android:id="@+id/lock_overlay_nine"
                 style="@style/lockerButtonStyle"
-                android:layout_margin="7dp"
+                android:layout_margin="5dp"
+                android:typeface="sans"
+                android:textSize="36sp"
                 android:background="@drawable/button_theme_light_black"
                 android:text="9" />
         </TableRow>
@@ -108,21 +136,28 @@
             <TextView
                 android:id="@+id/lock_overlay_hash"
                 style="@style/lockerButtonStyle"
-                android:layout_margin="7dp"
+                android:layout_margin="5dp"
+                android:textSize="32sp"
                 android:background="@drawable/button_theme_light_black"
                 android:text="" />
 
             <TextView
                 android:id="@+id/lock_overlay_zero"
                 style="@style/lockerButtonStyle"
-                android:layout_margin="7dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:typeface="sans"
+                android:textSize="36sp"
                 android:background="@drawable/button_theme_light_black"
                 android:text="0" />
 
             <TextView
                 android:id="@+id/lock_overlay_backspace"
                 style="@style/lockerButtonStyle"
-                android:layout_margin="7dp"
+                android:layout_margin="5dp"
+                android:textSize="36sp"
                 android:background="@drawable/button_theme_light_black"
                 android:text="C" />
         </TableRow>
@@ -131,6 +166,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         android:layout_above="@id/lock_overlay_button_table"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
@@ -152,6 +188,7 @@
             android:layout_height="wrap_content"
             android:cursorVisible="true"
             android:text=""
+            android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="28sp"
             android:visibility="visible" />
@@ -159,8 +196,9 @@
 
         <View
             android:id="@+id/lock_overlay_underline"
-            android:layout_width="180dp"
+            android:layout_width="150dp"
             android:layout_height="1dp"
+            android:layout_gravity="center"
             android:layout_below="@id/locker_overlay_text"
             android:background="@android:color/white" />
 

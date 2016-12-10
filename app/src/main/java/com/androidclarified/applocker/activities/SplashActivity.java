@@ -2,8 +2,11 @@ package com.androidclarified.applocker.activities;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -21,6 +24,7 @@ import android.widget.TextView;
 
 import com.androidclarified.applocker.R;
 import com.androidclarified.applocker.fragments.ChangePasswordFragment;
+import com.androidclarified.applocker.fragments.GoogleLoginFrag;
 import com.androidclarified.applocker.listeners.OverlayScreenListener;
 import com.androidclarified.applocker.model.AppBean;
 import com.androidclarified.applocker.utils.AppSharedPreferences;
@@ -36,11 +40,11 @@ public class SplashActivity extends AppCompatActivity implements OverlayScreenLi
     private Handler handler;
     private TextView appName;
     private FrameLayout fragmentFrame;
-    private ArrayList<AppBean> appBeanList=new ArrayList<>();
+    private ArrayList<AppBean> appBeanList = new ArrayList<>();
     private ChangePasswordFragment changePasswordFragment;
 
 
-    public final static String APP_BEAN_LIST="app_bean_list";
+    public final static String APP_BEAN_LIST = "app_bean_list";
 
 
     @Override
@@ -52,60 +56,69 @@ public class SplashActivity extends AppCompatActivity implements OverlayScreenLi
 
     }
 
-    public void init()
-    {
-        mainActivityStarter=new MainActivityStarter();
-        handler=new Handler();
-        appName= (TextView) findViewById(R.id.activity_splash_text);
-        fragmentFrame= (FrameLayout) findViewById(R.id.splash_activity_fragment_frame);
+    public void init() {
+        mainActivityStarter = new MainActivityStarter();
+        handler = new Handler();
+        appName = (TextView) findViewById(R.id.activity_splash_text);
+        fragmentFrame = (FrameLayout) findViewById(R.id.splash_activity_fragment_frame);
         appName.setTypeface(AppUtils.getFancyTextTypeface(this));
-        handler.postDelayed(mainActivityStarter,2000);
+        handler.postDelayed(mainActivityStarter, 2000);
     }
 
     private void getInstalledApps() {
         PackageManager packageManager = getPackageManager();
-        List<ApplicationInfo> applicationInfoList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+        Intent myintent=new Intent(Intent.ACTION_MAIN,null);
+        myintent.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> applicationInfoList = packageManager.queryIntentActivities(myintent,PackageManager.GET_META_DATA);
 
         for (int i = 0; i < applicationInfoList.size(); i++) {
+            ActivityInfo currentApplicationInfo = applicationInfoList.get(i).activityInfo;
 
-            String appLabel = (String) applicationInfoList.get(i).loadLabel(packageManager);
-            String packageName = applicationInfoList.get(i).packageName;
-            boolean isChecked=false;
-            boolean isSystemApp=false;
-            if(AppSharedPreferences.getAppSharedPreference(this,packageName))
-                isChecked=true;
-            if(isSystemApp(applicationInfoList.get(i)))
-                isSystemApp=true;
-
-
-            AppBean appBean=new AppBean(packageName, appLabel, isChecked, isSystemApp);
+            String appLabel = (String) currentApplicationInfo.loadLabel(packageManager);
+            String packageName = currentApplicationInfo.packageName;
+            boolean isChecked = false;
+            boolean isSystemApp = false;
+            if (AppSharedPreferences.getAppSharedPreference(this, packageName))
+                isChecked = true;
+            if (isSystemApp(applicationInfoList.get(i)))
+                isSystemApp = true;
 
 
-            appBeanList.add(appBean);
+            AppBean appBean = new AppBean(packageName, appLabel, isChecked, isSystemApp);
+
+
+
+                appBeanList.add(appBean);
         }
-        if (!AppSharedPreferences.getFirstTimePreference(this))
-        {
-            addPasswordFragment();
-        }
-        else {
+        if (!AppSharedPreferences.getFirstTimePreference(this)) {
+            addGoogleLoginFragment();
+        } else {
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             intent.putExtra(APP_BEAN_LIST, appBeanList);
             startActivity(intent);
         }
     }
 
-    private void addPasswordFragment()
+    private void addGoogleLoginFragment()
     {
-        changePasswordFragment=new ChangePasswordFragment();
+        GoogleLoginFrag googleLoginFrag=new GoogleLoginFrag();
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.splash_activity_fragment_frame,changePasswordFragment);
+        fragmentTransaction.replace(R.id.splash_activity_fragment_frame,googleLoginFrag);
+        fragmentTransaction.commit();
+
+
+    }
+    public void addPasswordFragment() {
+        changePasswordFragment = new ChangePasswordFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.splash_activity_fragment_frame, changePasswordFragment);
         fragmentTransaction.commit();
     }
 
-    private boolean isSystemApp(ApplicationInfo applicationInfo)
-    {
-        return ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM)!=0);
+    private boolean isSystemApp(ResolveInfo myapplicationInfo) {
+        return ((myapplicationInfo.activityInfo.applicationInfo.flags & (ApplicationInfo.FLAG_SYSTEM)) != 0);
 
     }
 
@@ -118,6 +131,7 @@ public class SplashActivity extends AppCompatActivity implements OverlayScreenLi
         vectorDrawable.draw(canvas);
         return bitmap;
     }
+
     private static Bitmap processDrawable(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
@@ -127,6 +141,7 @@ public class SplashActivity extends AppCompatActivity implements OverlayScreenLi
             throw new IllegalArgumentException("unsupported drawable type");
         }
     }
+
     public String BitMapToString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -142,16 +157,15 @@ public class SplashActivity extends AppCompatActivity implements OverlayScreenLi
 
     @Override
     public void hideOverlayScreen() {
-        Intent intent=new Intent(SplashActivity.this,MainActivity.class);
-        intent.putExtra(APP_BEAN_LIST,appBeanList);
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        intent.putExtra(APP_BEAN_LIST, appBeanList);
         startActivity(intent);
-        AppSharedPreferences.putFirstTimePreference(this,true);
+        AppSharedPreferences.putFirstTimePreference(this, true);
         changePasswordFragment.hideOverlay();
     }
 
 
-    private class MainActivityStarter implements Runnable
-    {
+    private class MainActivityStarter implements Runnable {
         @Override
         public void run() {
             getInstalledApps();

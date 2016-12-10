@@ -3,6 +3,7 @@ package com.androidclarified.applocker.widgets;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -87,14 +88,14 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
         inflateTheme();
         initButtons();
     }
-    private void inflateTheme()
-    {
+
+    private void inflateTheme() {
         int themeIndex = AppSharedPreferences.getLockThemePreference(getContext());
 
-        if (themeIndex==AppConstants.GALLERY_THEME)
+        if (themeIndex == AppConstants.GALLERY_THEME)
             layoutInflater.inflate(R.layout.lock_overlay_image_theme, this, true);
         else
-            layoutInflater.inflate(R.layout.lock_overlay_normal,this,true);
+            layoutInflater.inflate(R.layout.lock_overlay_normal, this, true);
 
     }
 
@@ -128,14 +129,15 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setOnClickListener(this);
+            Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Neuton_Extralight.ttf");
+            buttons[i].setTypeface(font);
         }
 
 
     }
 
-    public void slideUpAnimation()
-    {
-        Animation animation= AnimationUtils.loadAnimation(getContext(),R.anim.slide_up);
+    public void slideUpAnimation() {
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_up);
 
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].startAnimation(animation);
@@ -143,9 +145,8 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     }
 
-    public void slideDownAnimation()
-    {
-        Animation animation= AnimationUtils.loadAnimation(getContext(),R.anim.slide_down);
+    public void slideDownAnimation() {
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down);
 
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].startAnimation(animation);
@@ -273,7 +274,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
             if (previousPassword.equalsIgnoreCase(text)) {
                 AppSharedPreferences.putPasswordSharedPreference(getContext(), text);
                 changeButtonsStatus(true);
-                
+
                 overlayScreenListener.hideOverlayScreen();
 
             } else {

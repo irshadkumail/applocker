@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "922874568215",
+    "project_id": "applock-21a15"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922874568215:android:ed8120620b92fd3c",
+        "android_client_info": {
+          "package_name": "com.androidclarified.applocker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "922874568215-fe87idflfj26rcth3vfu8gktgu5dbem3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.androidclarified.applocker",
+            "certificate_hash": "9843499ED565079EC2E32DFFC12EA4CABF226838"
+          }
+        },
+        {
+          "client_id": "922874568215-aiqigfr8mclpshhhe2nd0p778iv9kb11.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCD5ez4KlcBZxiSraiCr6KmDHe_ikK2NzM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

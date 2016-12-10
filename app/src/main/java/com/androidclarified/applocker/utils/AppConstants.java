@@ -1,5 +1,7 @@
 package com.androidclarified.applocker.utils;
 
+import android.content.SharedPreferences;
+
 /**
  * Created by krazybee on 11/12/2016.
  */
@@ -14,6 +16,9 @@ public interface AppConstants {
 
     public static final String GALLERY_IMAGE="gallery_image";
 
+    public static final String USER_INFO_KEY="user_info_key";
+
+    public static final String USER_INFO_EMPTY="user_info_empty";
 
     public static final int GALLERY_PICK=101;
 

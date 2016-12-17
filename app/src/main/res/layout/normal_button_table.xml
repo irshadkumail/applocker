@@ -2,7 +2,7 @@
 <TableLayout
     android:id="@+id/lock_overlay_button_table"
     android:layout_width="match_parent"
-    android:layout_height="290dp"
+    android:layout_height="250dp"
     android:stretchColumns="*"
     android:layout_gravity="bottom"
     android:layout_alignParentBottom="true"
@@ -14,6 +14,7 @@
             android:id="@+id/lock_overlay_one"
             style="@style/lockerButtonStyle"
             android:layout_margin="2dp"
+
             android:background="@drawable/lock_overlay_normal_drawable"
             android:text="1" />
 

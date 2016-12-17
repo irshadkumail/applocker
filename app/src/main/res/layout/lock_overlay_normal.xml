@@ -21,11 +21,17 @@
         android:scaleType="fitXY"
         android:src="@drawable/lock_icon" />
 
+    <include
+        android:id="@+id/pasw_entry_text"
+        layout="@layout/pasw_entry_text_layout" />
+
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lock_button_table"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <include
             android:id="@+id/normal_button_table_tl"
@@ -34,10 +40,6 @@
 
 
     </FrameLayout>
-
-    <include
-        android:id="@+id/pasw_entry_text"
-        layout="@layout/pasw_entry_text_layout" />
 
 
 </RelativeLayout>

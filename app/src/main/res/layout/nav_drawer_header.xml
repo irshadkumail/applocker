@@ -2,8 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="180dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="bottom"
-    android:background="@color/jetblack">
+    android:background="@color/colorPrimary">
 
     <View
         android:layout_gravity="bottom"
@@ -24,7 +25,7 @@
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/demo" />
+            android:src="@drawable/default_pic" />
         <RelativeLayout
             android:layout_centerVertical="true"
             android:layout_marginTop="12dp"
@@ -35,7 +36,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Irshad Kumail"
+                tools:text="Irshad Kumail"
                 android:id="@+id/tv_user_display_name"
                 android:singleLine="true"
                 android:paddingLeft="10dp"
@@ -46,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13dp"
-                android:text="irshadkumail@gmail.com"
+                tools:text="irshadkumail@gmail.com"
                 android:id="@+id/tv_user_email"
                 android:paddingLeft="10dp"
                 android:layout_marginTop="1.5dp"

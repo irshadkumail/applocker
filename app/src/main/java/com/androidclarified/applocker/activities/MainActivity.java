@@ -1,6 +1,7 @@
 package com.androidclarified.applocker.activities;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
@@ -15,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -50,6 +52,12 @@ import com.androidclarified.applocker.utils.AppConstants;
 import com.androidclarified.applocker.utils.AppSharedPreferences;
 import com.androidclarified.applocker.utils.AppUtils;
 import com.androidclarified.applocker.utils.JSONUtils;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -60,9 +68,12 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnAppCheckedListener, NavigationView.OnNavigationItemSelectedListener, CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnAppCheckedListener,
+        NavigationView.OnNavigationItemSelectedListener, CompoundButton.OnCheckedChangeListener, GoogleApiClient.OnConnectionFailedListener {
 
-    private FloatingActionButton fab;
+    private static final int SIGN_IN_REQUEST_CODE = 101;
+
+
     private SwitchCompat startSwitch;
     private Toolbar toolbar;
     private ViewPager viewPager;
@@ -78,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private DrawerLayout drawerLayout;
     private Intent serviceIntent;
+    private GoogleApiClient googleApiClient;
+    private GoogleSignInOptions googleSignInOptions;
     private PermissionFragment permissionFragment;
     private ArrayList<OnRecieveAppCheckedListener> onRecieveAppCheckedListeners;
     public PendingIntent pendingIntent;
@@ -94,8 +107,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void onResume() {
-        super.onResume();
+    public void onResumeFragments() {
+        super.onResumeFragments();
         initPermission();
 
     }
@@ -144,7 +157,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //Views Instantiation
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         permissionFragment = new PermissionFragment();
         navigationView = (NavigationView) findViewById(R.id.main_activity_navigation_menu);
@@ -160,6 +175,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigationView.setNavigationItemSelectedListener(this);
         startSwitch.setOnCheckedChangeListener(this);
         onRecieveAppCheckedListeners = new ArrayList<>();
+        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
+                .enableAutoManage(this, this)
+                .build();
+
+
         initTabPager();
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -186,30 +211,74 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if (!AppSharedPreferences.getUserInfoPreferences(this).equalsIgnoreCase(AppConstants.USER_INFO_EMPTY)) {
                 JSONObject jsonObject = new JSONObject(AppSharedPreferences.getUserInfoPreferences(this));
+                navigationView.getMenu().findItem(R.id.nav_logout).setVisible(true);
+                displayName.setText(JSONUtils.getStringFromJSONObject(jsonObject, "display_name"));
+                emailText.setText(JSONUtils.getStringFromJSONObject(jsonObject, "email"));
+                String imagePath = JSONUtils.getStringFromJSONObject(jsonObject, "user_pic");
+                if (!imagePath.isEmpty())
+                    Picasso.with(this).load(imagePath).fit().centerCrop().into(circleImageView);
+                else
+                    Picasso.with(this).load(R.drawable.default_pic).fit().centerCrop().into(circleImageView);
+            } else {
+                navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
+                displayName.setText("Login ");
+                emailText.setText("");
+                navigationHeader.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+                        startActivityForResult(intent, SIGN_IN_REQUEST_CODE);
 
-                displayName.setText(JSONUtils.getStringFromJSONObject(jsonObject,"display_name"));
-                emailText.setText(JSONUtils.getStringFromJSONObject(jsonObject,"email"));
-                Picasso.with(this).load(JSONUtils.getStringFromJSONObject(jsonObject,"user_pic")).fit().centerCrop().into(circleImageView);
-
-
+                    }
+                });
 
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case SIGN_IN_REQUEST_CODE:
+                    GoogleSignInResult googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                    handleIntentResult(googleSignInResult);
+                    break;
+            }
+        }
+    }
+
+    private void handleIntentResult(GoogleSignInResult googleSignInResult) {
+        try {
+            if (googleSignInResult.isSuccess()) {
+                GoogleSignInAccount googleSignInAccount = googleSignInResult.getSignInAccount();
+                JSONObject userInfoJson = new JSONObject();
+                userInfoJson.put("display_name", googleSignInAccount.getDisplayName());
+                userInfoJson.put("email", googleSignInAccount.getEmail());
+                userInfoJson.put("user_pic", googleSignInAccount.getPhotoUrl());
+                AppSharedPreferences.putUserInfoPreference(this, userInfoJson.toString());
+                setNavigationHeader();
+            } else {
+                Toast.makeText(this, "Sign In Unsuccessful", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void onBackPressed() {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this)
-                .setMessage("Do you want to quit AooLocker?")
+                .setMessage("Do you want to quit AppLocker?")
                 .setTitle("Quit AppLocker")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        System.exit(0);
+                        android.os.Process.killProcess(android.os.Process.myPid());
+
 
                     }
                 }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -277,10 +346,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.fab:
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                break;
+
 
         }
 
@@ -322,6 +388,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         Intent intent = new Intent(this, DrawerActivity.class);
@@ -339,6 +406,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return false;
             case R.id.nav_settings:
                 return false;
+            case R.id.nav_logout:
+                Auth.GoogleSignInApi.signOut(googleApiClient);
+                AppSharedPreferences.putUserInfoPreference(this,AppConstants.USER_INFO_EMPTY);
+                setNavigationHeader();
+
+                return false;
+
 
             default:
                 return false;
@@ -366,6 +440,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             stopAppCheck();
         }
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 

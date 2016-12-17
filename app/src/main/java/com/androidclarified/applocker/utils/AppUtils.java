@@ -31,7 +31,7 @@ public class AppUtils {
     }
 
     public static Typeface getFancyTextTypeface(Context context) {
-        return Typeface.createFromAsset(context.getAssets(), "fonts/QueenofHeaven.ttf");
+        return Typeface.createFromAsset(context.getAssets(), "fonts/skarpa_bold.ttf");
     }
 
     public static Typeface getSecondaryTextTypeface(Context context) {

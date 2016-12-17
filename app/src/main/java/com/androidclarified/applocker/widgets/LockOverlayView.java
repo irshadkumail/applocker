@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -90,12 +91,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     }
 
     private void inflateTheme() {
-        int themeIndex = AppSharedPreferences.getLockThemePreference(getContext());
-
-        if (themeIndex == AppConstants.GALLERY_THEME)
-            layoutInflater.inflate(R.layout.lock_overlay_image_theme, this, true);
-        else
-            layoutInflater.inflate(R.layout.lock_overlay_normal, this, true);
+        layoutInflater.inflate(R.layout.lock_overlay_normal, this, true);
 
     }
 
@@ -126,11 +122,11 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
         handler = new Handler();
         setPasswordHeadingText();
 
-
+        int themeIndex = AppSharedPreferences.getLockThemePreference(getContext());
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setOnClickListener(this);
-            Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Neuton_Extralight.ttf");
-            buttons[i].setTypeface(font);
+           // if (themeIndex == AppConstants.GALLERY_THEME)
+                buttons[i].setBackground(getResources().getDrawable(R.drawable.gallery_theme_drawable));
         }
 
 
@@ -139,18 +135,18 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     public void slideUpAnimation() {
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_up);
 
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].startAnimation(animation);
-        }
+
+        startAnimation(animation);
+
 
     }
 
     public void slideDownAnimation() {
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down);
 
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].startAnimation(animation);
-        }
+
+        startAnimation(animation);
+
 
     }
 
@@ -169,7 +165,9 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
             Picasso.with(getContext()).load("file://" + AppSharedPreferences.getGalleryImagePreference(getContext())).fit().centerCrop().into(mainImage);
         } else {
             mainLayout.setBackgroundColor(AppUtils.getColor(getContext(), themeIndex));
-            mainImage.setVisibility(GONE);
+            //mainImage.setVisibility(GONE);
+            Picasso.with(getContext()).load(R.drawable.demo_wp).fit().centerCrop().into(mainImage);
+
         }
     }
 
@@ -297,6 +295,7 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
         } else {
             changeButtonsStatus(true);
             passwordText.setText("");
+            startWrongPasswordAnim();
             Toast.makeText(getContext(), "Wrong Password", Toast.LENGTH_SHORT).show();
         }
 
@@ -310,6 +309,14 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
                 buttons[i].setOnClickListener(null);
         }
 
+    }
+
+    private void startWrongPasswordAnim()
+    {
+        Animation shakeAnim = AnimationUtils.loadAnimation(getContext(), R.anim.my_shake);
+        lockIcon.startAnimation(shakeAnim);
+        Vibrator vibrator= (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(800);
     }
 
 

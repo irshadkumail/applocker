@@ -80,7 +80,7 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
         isServiceRunning=true;
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        windowParams = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+        windowParams = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSLUCENT);
 
 
@@ -134,12 +134,14 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
         lockOverlayView.setImageIcon(RUNNING_PACKAGE_NAME);
         lockOverlayView.setBackgroundColor();
         windowManager.addView(lockOverlayView, windowParams);
+        lockOverlayView.slideUpAnimation();
         AppCheckerService.isDialogVisile = true;
     }
 
     @Override
     public void hideOverlayScreen() {
 
+        lockOverlayView.slideDownAnimation();
         windowManager.removeView(lockOverlayView);
         AppCheckerService.isPasswordEntered = false;
         AppCheckerService.isDialogVisile = false;
@@ -194,7 +196,7 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
 
             }
             */
-            handler.postDelayed(this, 2000);
+            handler.postDelayed(this, 1000);
         }
     }
 

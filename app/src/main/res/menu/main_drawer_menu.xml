@@ -14,12 +14,7 @@
         <item android:title="Best Practices"
             android:id="@+id/nav_best_prac"/>
 
-        <item android:id="@+id/nav_change_buttons"
-            android:title="Button Theme"/>
 
-
-        <item android:id="@+id/nav_permissions"
-            android:title="Check Permissions"/>
 
 
     </group>
@@ -36,6 +31,8 @@
 
             <item android:id="@+id/nav_settings"
                 android:title="Settings"/>
+            <item android:id="@+id/nav_logout"
+                android:title="Logout"/>
 
         </group>
 

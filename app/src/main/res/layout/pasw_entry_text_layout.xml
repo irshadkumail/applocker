@@ -24,6 +24,7 @@
         android:cursorVisible="true"
         android:text=""
         android:gravity="center"
+        android:password="true"
         android:textColor="@android:color/white"
         android:textSize="30sp"
         android:visibility="visible" />

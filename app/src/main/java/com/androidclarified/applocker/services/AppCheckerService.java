@@ -134,17 +134,28 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
         lockOverlayView.setImageIcon(RUNNING_PACKAGE_NAME);
         lockOverlayView.setBackgroundColor();
         windowManager.addView(lockOverlayView, windowParams);
-        lockOverlayView.slideUpAnimation();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                lockOverlayView.startAnim();
+            }
+        },500);
+
         AppCheckerService.isDialogVisile = true;
     }
 
     @Override
     public void hideOverlayScreen() {
+        lockOverlayView.stopAnim();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                windowManager.removeView(lockOverlayView);
+                AppCheckerService.isPasswordEntered = false;
+                AppCheckerService.isDialogVisile = false;
+            }
+        },500);
 
-        lockOverlayView.slideDownAnimation();
-        windowManager.removeView(lockOverlayView);
-        AppCheckerService.isPasswordEntered = false;
-        AppCheckerService.isDialogVisile = false;
 
     }
 

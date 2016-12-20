@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -46,9 +47,10 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     private RelativeLayout mainLayout;
     private ImageView mainImage;
     private ImageView lockIcon;
+    private FrameLayout buttonFrame;
     private TextView passwordHeadingText;
     private boolean isPasswordEntered;
-    // private AppCheckerService appCheckerService;
+    private View rootView;
     private OverlayScreenListener overlayScreenListener;
 
     private Handler handler;
@@ -91,7 +93,8 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     }
 
     private void inflateTheme() {
-        layoutInflater.inflate(R.layout.lock_overlay_normal, this, true);
+        rootView=layoutInflater.inflate(R.layout.lock_overlay_normal, this, true);
+
 
     }
 
@@ -104,50 +107,47 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
         passwordHeadingText = (TextView) findViewById(R.id.lock_overlay_password_heading_text);
 
-        mainLayout = (RelativeLayout) findViewById(R.id.lock_overlay_main_layout);
-        mainImage = (ImageView) findViewById(R.id.main_image);
-        passwordText = (TextView) findViewById(R.id.locker_overlay_text);
-        lockIcon = (ImageView) findViewById(R.id.lock_overlay_normal_icon);
-        buttons[0] = (TextView) findViewById(R.id.lock_overlay_zero);
-        buttons[1] = (TextView) findViewById(R.id.lock_overlay_one);
-        buttons[2] = (TextView) findViewById(R.id.lock_overlay_two);
-        buttons[3] = (TextView) findViewById(R.id.lock_overlay_three);
-        buttons[4] = (TextView) findViewById(R.id.lock_overlay_four);
-        buttons[5] = (TextView) findViewById(R.id.lock_overlay_five);
-        buttons[6] = (TextView) findViewById(R.id.lock_overlay_six);
-        buttons[7] = (TextView) findViewById(R.id.lock_overlay_seven);
-        buttons[8] = (TextView) findViewById(R.id.lock_overlay_eight);
-        buttons[9] = (TextView) findViewById(R.id.lock_overlay_nine);
-        buttons[10] = (TextView) findViewById(R.id.lock_overlay_backspace);
+        mainLayout = (RelativeLayout)rootView.findViewById(R.id.lock_overlay_main_layout);
+        mainImage = (ImageView)rootView. findViewById(R.id.main_image);
+        buttonFrame = (FrameLayout)rootView. findViewById(R.id.lock_button_table);
+        passwordText = (TextView)rootView.  findViewById(R.id.locker_overlay_text);
+        lockIcon = (ImageView) rootView. findViewById(R.id.lock_overlay_normal_icon);
+        buttons[0] = (TextView) rootView. findViewById(R.id.lock_overlay_zero);
+        buttons[1] = (TextView) rootView. findViewById(R.id.lock_overlay_one);
+        buttons[2] = (TextView) rootView. findViewById(R.id.lock_overlay_two);
+        buttons[3] = (TextView) rootView. findViewById(R.id.lock_overlay_three);
+        buttons[4] = (TextView) rootView. findViewById(R.id.lock_overlay_four);
+        buttons[5] = (TextView) rootView. findViewById(R.id.lock_overlay_five);
+        buttons[6] = (TextView) rootView. findViewById(R.id.lock_overlay_six);
+        buttons[7] = (TextView) rootView. findViewById(R.id.lock_overlay_seven);
+        buttons[8] = (TextView) rootView. findViewById(R.id.lock_overlay_eight);
+        buttons[9] = (TextView) rootView. findViewById(R.id.lock_overlay_nine);
+        buttons[10] = (TextView) rootView. findViewById(R.id.lock_overlay_backspace);
         handler = new Handler();
         setPasswordHeadingText();
 
         int themeIndex = AppSharedPreferences.getLockThemePreference(getContext());
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setOnClickListener(this);
-           // if (themeIndex == AppConstants.GALLERY_THEME)
-                buttons[i].setBackground(getResources().getDrawable(R.drawable.gallery_theme_drawable));
+
         }
 
 
     }
 
-    public void slideUpAnimation() {
-        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_up);
+    private Animation getSlideUpAnimation() {
+        Animation animation = AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left);
 
-
-        startAnimation(animation);
+        return animation;
 
 
     }
 
-    public void slideDownAnimation() {
-        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_down);
+    private Animation getSlideDownAnimation() {
+        Animation animation = AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_out_right);
+        animation.setFillAfter(false);
 
-
-        startAnimation(animation);
-
-
+        return animation;
     }
 
     private void setPasswordHeadingText() {
@@ -159,14 +159,12 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     public void setBackgroundColor() {
         int themeIndex = AppSharedPreferences.getLockThemePreference(getContext());
-
         if (themeIndex == AppConstants.GALLERY_THEME) {
-            File file = new File(AppSharedPreferences.getGalleryImagePreference(getContext()));
             Picasso.with(getContext()).load("file://" + AppSharedPreferences.getGalleryImagePreference(getContext())).fit().centerCrop().into(mainImage);
+            buttonFrame.setBackgroundColor(getResources().getColor(R.color.frame_bg));
         } else {
             mainLayout.setBackgroundColor(AppUtils.getColor(getContext(), themeIndex));
-            //mainImage.setVisibility(GONE);
-            Picasso.with(getContext()).load(R.drawable.demo_wp).fit().centerCrop().into(mainImage);
+            mainImage.setVisibility(GONE);
 
         }
     }
@@ -259,9 +257,18 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
             checkforEnterPasswordMode(text);
         }
     }
+    public void startAnim()
+    {
+        rootView.startAnimation(getSlideUpAnimation());
+    }
+    public void stopAnim()
+    {
+        rootView.startAnimation(getSlideDownAnimation());
+    }
 
     private void checkForConfirmPasswordMode(String text) {
         if (!confirmPasswordSecondEntry) {
+            rootView.startAnimation(getSlideDownAnimation());
             passwordHeadingText.setText("Confirm Password");
             previousPassword = text;
             passwordText.setText("");
@@ -311,11 +318,10 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
 
     }
 
-    private void startWrongPasswordAnim()
-    {
+    private void startWrongPasswordAnim() {
         Animation shakeAnim = AnimationUtils.loadAnimation(getContext(), R.anim.my_shake);
         lockIcon.startAnimation(shakeAnim);
-        Vibrator vibrator= (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(800);
     }
 

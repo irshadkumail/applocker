@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private GoogleSignInOptions googleSignInOptions;
     private PermissionFragment permissionFragment;
     private ArrayList<OnRecieveAppCheckedListener> onRecieveAppCheckedListeners;
-    public PendingIntent pendingIntent;
+    public static PendingIntent pendingIntent;
     public AlarmManager alarmManager;
 
 
@@ -144,20 +144,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void startCheckingforApps() {
         startService(serviceIntent);
-        //  alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),(1000)*(60)*(10),pendingIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), (1000) * (60) * (10), pendingIntent);
     }
 
     private void stopAppCheck() {
         stopService(serviceIntent);
-        // alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),(1000)*(60)*(10),pendingIntent);
+        AppSharedPreferences.putServiceRunningPreference(this,false);
+        alarmManager.cancel(pendingIntent);
 
     }
 
     private void initViews() {
 
         //Views Instantiation
-
-
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -196,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, AlarmBroadcastReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        if (AppCheckerService.isServiceRunning)
+        if (AppSharedPreferences.getServiceRunningPreferencec(this))
             startSwitch.setChecked(true);
 
 
@@ -216,13 +215,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 emailText.setText(JSONUtils.getStringFromJSONObject(jsonObject, "email"));
                 String imagePath = JSONUtils.getStringFromJSONObject(jsonObject, "user_pic");
                 if (!imagePath.isEmpty())
-                    Picasso.with(this).load(imagePath).fit().centerCrop().into(circleImageView);
+                    Picasso.with(this).load(imagePath).error(R.drawable.default_pic).fit().centerCrop().into(circleImageView);
                 else
                     Picasso.with(this).load(R.drawable.default_pic).fit().centerCrop().into(circleImageView);
             } else {
                 navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
                 displayName.setText("Login ");
                 emailText.setText("");
+                Picasso.with(this).load(R.drawable.default_pic).fit().centerCrop().into(circleImageView);
                 navigationHeader.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -373,6 +373,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, DrawerActivity.class);
+            intent.setAction(DrawerActivity.SETTING_ACTION);
+            startActivity(intent);
             return true;
         }
 
@@ -405,10 +408,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.nav_mail_me:
                 return false;
             case R.id.nav_settings:
+                intent.setAction(DrawerActivity.SETTING_ACTION);
+                startActivity(intent);
                 return false;
             case R.id.nav_logout:
                 Auth.GoogleSignInApi.signOut(googleApiClient);
-                AppSharedPreferences.putUserInfoPreference(this,AppConstants.USER_INFO_EMPTY);
+                AppSharedPreferences.putUserInfoPreference(this, AppConstants.USER_INFO_EMPTY);
                 setNavigationHeader();
 
                 return false;
@@ -452,7 +457,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d("Irshad","AlarmBroadcastReceiver Started "+AppSharedPreferences.getServiceRunningPreferencec(context)+", "+AppCheckerService.isServiceRunning);
 
+            Toast.makeText(context,"AlarmBroadcastReceiver",Toast.LENGTH_SHORT).show();
+
+            if (AppSharedPreferences.getServiceRunningPreferencec(context) && !AppCheckerService.isServiceRunning) {
+
+                Intent serviceIntent=new Intent(context,AppCheckerService.class);
+                context.startService(serviceIntent);
+
+                if (intent.getAction()!=null && intent.getAction().equalsIgnoreCase("android.intent.action.BOOT_COMPLETED")){
+                    AlarmManager alarmManager= (AlarmManager) context.getSystemService(ALARM_SERVICE);
+                    alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),(60)*(1000)*(10),pendingIntent);
+
+                }
+
+
+
+            }
 
         }
     }

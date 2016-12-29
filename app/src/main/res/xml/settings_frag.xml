@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="show_password_pref"
+        android:title="Show Password"
+        android:summary="Shows the passowrd when "
+        />
+
+    <CheckBoxPreference
+        android:key="hide_notification_pref"
+        android:title="Hide Notification"
+        android:summary="Hides the notification when Applocker is running (It is recommended not to enable is it might cause the applocker to stop without notice)"
+        />
+
+    <PreferenceScreen
+        android:key="package_usage_pref"
+        android:title="Grant Package Permission"
+        />
+
+    <PreferenceScreen android:key="draw_over_pref"
+        android:title="Draw over apps"/>
+
+
+</PreferenceScreen>

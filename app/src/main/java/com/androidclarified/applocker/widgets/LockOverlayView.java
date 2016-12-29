@@ -1,11 +1,14 @@
 package com.androidclarified.applocker.widgets;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.support.v7.preference.PreferenceManager;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -125,6 +128,12 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
         buttons[10] = (TextView) rootView. findViewById(R.id.lock_overlay_backspace);
         handler = new Handler();
         setPasswordHeadingText();
+
+        SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        if (sharedPreferences.getBoolean("show_password_pref",false))
+            passwordText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+
 
         int themeIndex = AppSharedPreferences.getLockThemePreference(getContext());
         for (int i = 0; i < buttons.length; i++) {
@@ -269,11 +278,16 @@ public class LockOverlayView extends RelativeLayout implements View.OnClickListe
     private void checkForConfirmPasswordMode(String text) {
         if (!confirmPasswordSecondEntry) {
             rootView.startAnimation(getSlideDownAnimation());
-            passwordHeadingText.setText("Confirm Password");
             previousPassword = text;
             passwordText.setText("");
             changeButtonsStatus(true);
             confirmPasswordSecondEntry = true;
+            passwordHeadingText.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    passwordHeadingText.setText("Confirm Password");
+                }
+            },500);
             Toast.makeText(getContext(), "" + previousPassword, Toast.LENGTH_SHORT).show();
         } else {
             if (previousPassword.equalsIgnoreCase(text)) {

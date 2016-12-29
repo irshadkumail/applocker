@@ -21,10 +21,9 @@
     <FrameLayout
         android:id="@+id/splash_activity_fragment_frame"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent"
-        android:background="@color/jetblack"
-        >
+        android:background="@color/jetblack"/>
 
-    </FrameLayout>
 
 </RelativeLayout>

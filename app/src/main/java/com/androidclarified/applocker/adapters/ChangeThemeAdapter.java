@@ -74,6 +74,7 @@ public class ChangeThemeAdapter extends RecyclerView.Adapter<ChangeThemeAdapter.
             Picasso.with(context).load("file://"+AppSharedPreferences.getGalleryImagePreference(context)).centerCrop().fit().into(holder.themeImage);
         } else {
             holder.themeImage.setVisibility(View.GONE);
+            holder.addGallery.setVisibility(View.GONE);
             holder.themeColourFrame.setVisibility(View.VISIBLE);
             holder.themeColourFrame.setBackgroundColor(AppUtils.getColor(context, position));
         }

@@ -12,6 +12,8 @@ public interface AppConstants {
 
     public static final String PASSWORD_KEY="password_key";
 
+    public static final String IS_SERVICE_RUNNING="is_service_running";
+
     public static final String APP_PREFERENCE_FILE_NAME="com.androidclarified.applocker.preferences";
 
     public static final String GALLERY_IMAGE="gallery_image";

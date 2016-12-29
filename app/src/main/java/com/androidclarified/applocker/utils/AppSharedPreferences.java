@@ -6,6 +6,7 @@ import android.util.Log;
 
 import static com.androidclarified.applocker.utils.AppConstants.APP_PREFERENCE_FILE_NAME;
 import static com.androidclarified.applocker.utils.AppConstants.GALLERY_IMAGE;
+import static com.androidclarified.applocker.utils.AppConstants.IS_SERVICE_RUNNING;
 import static com.androidclarified.applocker.utils.AppConstants.USER_INFO_EMPTY;
 import static com.androidclarified.applocker.utils.AppConstants.USER_INFO_KEY;
 
@@ -102,6 +103,19 @@ public class AppSharedPreferences {
     {
         SharedPreferences sharedPreferences=context.getSharedPreferences(APP_PREFERENCE_FILE_NAME,Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(AppConstants.FIRST_TIME_USER,false);
+    }
+
+    public static void putServiceRunningPreference(Context context,boolean isRunning){
+        SharedPreferences sharedPreferences=context.getSharedPreferences(APP_PREFERENCE_FILE_NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor= sharedPreferences.edit();
+        editor.putBoolean(IS_SERVICE_RUNNING,isRunning);
+        editor.commit();
+
+    }
+    public static boolean getServiceRunningPreferencec(Context context)
+    {
+        SharedPreferences sharedPreferences=context.getSharedPreferences(APP_PREFERENCE_FILE_NAME,Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(IS_SERVICE_RUNNING,false);
 
     }
 

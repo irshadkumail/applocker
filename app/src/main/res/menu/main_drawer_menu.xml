@@ -6,15 +6,20 @@
         android:checkableBehavior="single">
 
         <item android:title="Change Theme"
+            android:icon="@drawable/change_theme"
             android:id="@+id/nav_change_theme"/>
 
         <item android:title="Change Password"
+            android:icon="@drawable/change_password"
             android:id="@+id/nav_change_password"/>
 
         <item android:title="Best Practices"
+            android:icon="@drawable/best_practices"
             android:id="@+id/nav_best_prac"/>
 
-
+        <item android:id="@+id/nav_mail_me"
+            android:icon="@drawable/mail_me"
+            android:title="Mail me"/>
 
 
     </group>
@@ -26,8 +31,6 @@
                 android:title="Enable Applock"
                 app:showAsAction="always"
                 app:actionLayout="@layout/drawe_item_lock_switch"/>
-            <item android:id="@+id/nav_mail_me"
-                android:title="Mail me"/>
 
             <item android:id="@+id/nav_settings"
                 android:title="Settings"/>

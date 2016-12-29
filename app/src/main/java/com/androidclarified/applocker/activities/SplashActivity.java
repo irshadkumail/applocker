@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -62,7 +63,7 @@ public class SplashActivity extends AppCompatActivity implements OverlayScreenLi
         appName = (TextView) findViewById(R.id.activity_splash_text);
         fragmentFrame = (FrameLayout) findViewById(R.id.splash_activity_fragment_frame);
         appName.setTypeface(AppUtils.getFancyTextTypeface(this));
-        handler.postDelayed(mainActivityStarter, 2000);
+        handler.postDelayed(mainActivityStarter, 1200);
     }
 
     private void getInstalledApps() {
@@ -70,6 +71,19 @@ public class SplashActivity extends AppCompatActivity implements OverlayScreenLi
         Intent myintent=new Intent(Intent.ACTION_MAIN,null);
         myintent.addCategory(Intent.CATEGORY_LAUNCHER);
         List<ResolveInfo> applicationInfoList = packageManager.queryIntentActivities(myintent,PackageManager.GET_META_DATA);
+
+
+        String installerAppLabel = "Package Installer";
+        String installerPackageName = "com.android.packageinstaller";
+        boolean isInstallerChecked = false;
+        boolean isInstallerSystemApp = false;
+        if (AppSharedPreferences.getAppSharedPreference(this, installerPackageName))
+            isInstallerChecked = true;
+
+        AppBean installerAppBean = new AppBean(installerPackageName, installerAppLabel, isInstallerChecked, isInstallerSystemApp);
+
+        appBeanList.add(installerAppBean);
+
 
         for (int i = 0; i < applicationInfoList.size(); i++) {
             ActivityInfo currentApplicationInfo = applicationInfoList.get(i).activityInfo;
@@ -105,6 +119,7 @@ public class SplashActivity extends AppCompatActivity implements OverlayScreenLi
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.splash_activity_fragment_frame,googleLoginFrag);
+        fragmentFrame.setVisibility(View.VISIBLE);
         fragmentTransaction.commit();
 
 

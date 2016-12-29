@@ -56,13 +56,15 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
     public void onCreate()
     {
         super.onCreate();
+
         Notification notification=new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.applock_icon)
                 .setContentTitle("App Locker")
                 .setContentText("Your apps are protected").build();
-
-
         startForeground(1002,notification);
+
+
+        AppSharedPreferences.putServiceRunningPreference(this,true);
 
     }
 
@@ -78,6 +80,7 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
         appCheckerClass = new AppCheckerClass();
         handler = new Handler();
         isServiceRunning=true;
+        AppSharedPreferences.putServiceRunningPreference(this,true);
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         windowParams = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_PRIORITY_PHONE, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
@@ -183,7 +186,7 @@ public class AppCheckerService extends Service implements OverlayScreenListener 
             if(!PREVIOUS_PACKAGE_NAME.equalsIgnoreCase(RUNNING_PACKAGE_NAME))
             {
                 notifyAppChange();
-                Toast.makeText(AppCheckerService.this,"APP CHANGE",Toast.LENGTH_SHORT).show();
+                Toast.makeText(AppCheckerService.this,"APP CHANGE "+RUNNING_PACKAGE_NAME,Toast.LENGTH_SHORT).show();
             }
 
             /*
